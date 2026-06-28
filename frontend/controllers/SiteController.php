@@ -44,7 +44,7 @@ class SiteController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::class,
-                'only' => ['logout', 'signup'],
+                'only' => ['logout', 'signup', 'dashboard', 'dashboard-manage', 'customers', 'customers-manage', 'catalog', 'catalog-manage', 'orders', 'orders-manage', 'production', 'production-manage', 'admin', 'admin-manage'],
                 'rules' => [
                     [
                         'actions' => ['signup'],
@@ -52,7 +52,7 @@ class SiteController extends Controller
                         'roles' => ['?'],
                     ],
                     [
-                        'actions' => ['logout'],
+                        'actions' => ['logout', 'dashboard', 'dashboard-manage', 'customers', 'customers-manage', 'catalog', 'catalog-manage', 'orders', 'orders-manage', 'production', 'production-manage', 'admin', 'admin-manage'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -168,6 +168,86 @@ class SiteController extends Controller
     public function actionAbout(): string
     {
         return $this->render('about');
+    }
+
+    /**
+     * Displays impressum page.
+     *
+     * @return string
+     */
+    public function actionImpressum(): string
+    {
+        return $this->render('impressum');
+    }
+
+    private function renderInternalPage(string $moduleName, string $routeId, string $viewPermission, string $managePermission): string
+    {
+        return $this->render('internal-page', [
+            'moduleName' => $moduleName,
+            'routeId' => $routeId,
+            'canView' => Yii::$app->user->can($viewPermission),
+            'canManage' => Yii::$app->user->can($managePermission),
+        ]);
+    }
+
+    public function actionDashboard(): string
+    {
+        return $this->renderInternalPage('Dashboard', 'dashboard', 'viewDashboard', 'manageDashboard');
+    }
+
+    public function actionCustomers(): string
+    {
+        return $this->renderInternalPage('Customers', 'customers', 'viewCustomers', 'manageCustomers');
+    }
+
+    public function actionCatalog(): string
+    {
+        return $this->renderInternalPage('Catalog', 'catalog', 'viewCatalog', 'manageCatalog');
+    }
+
+    public function actionOrders(): string
+    {
+        return $this->renderInternalPage('Orders', 'orders', 'viewOrders', 'manageOrders');
+    }
+
+    public function actionProduction(): string
+    {
+        return $this->renderInternalPage('Production', 'production', 'viewProduction', 'manageProduction');
+    }
+
+    public function actionAdmin(): string
+    {
+        return $this->renderInternalPage('Admin', 'admin', 'viewAdmin', 'manageAdmin');
+    }
+
+    public function actionDashboardManage(): string
+    {
+        return $this->renderInternalPage('Dashboard', 'dashboard', 'viewDashboard', 'manageDashboard');
+    }
+
+    public function actionCustomersManage(): string
+    {
+        return $this->renderInternalPage('Customers', 'customers', 'viewCustomers', 'manageCustomers');
+    }
+
+    public function actionCatalogManage(): string
+    {
+        return $this->renderInternalPage('Catalog', 'catalog', 'viewCatalog', 'manageCatalog');
+    }
+
+    public function actionOrdersManage(): string
+    {
+        return $this->renderInternalPage('Orders', 'orders', 'viewOrders', 'manageOrders');
+    }
+
+    public function actionProductionManage(): string
+    {
+        return $this->renderInternalPage('Production', 'production', 'viewProduction', 'manageProduction');
+    }
+
+    public function actionAdminManage(): string
+    {
+        return $this->renderInternalPage('Admin', 'admin', 'viewAdmin', 'manageAdmin');
     }
 
     /**
