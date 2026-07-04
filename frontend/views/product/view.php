@@ -23,6 +23,24 @@ $this->title = $model->name;
             'label' => 'Perishable',
             'value' => $model->is_perishable ? 'Yes' : 'No',
         ],
+        [
+            'label' => 'Stock Quantity',
+            'value' => $model->stock ? $model->stock->quantity : 'No stock record',
+        ],
+        [
+            'label' => 'Low Stock Threshold',
+            'value' => $model->stock ? $model->stock->low_stock_threshold : '-',
+        ],
+        [
+            'label' => 'Stock Status',
+            'value' => $model->stock
+                ? ($model->stock->isLowStock() ? 'Low Stock' : 'OK')
+                : '-',
+        ],
+        [
+            'label' => 'Expiry Date',
+            'value' => $model->stock ? ($model->stock->expiry_date ?? '-') : '-',
+        ],
         'description:ntext',
     ],
 ]) ?>
