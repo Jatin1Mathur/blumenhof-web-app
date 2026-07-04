@@ -10,6 +10,7 @@ use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\web\UploadedFile;
 
 class ProductController extends Controller
 {
@@ -47,8 +48,12 @@ class ProductController extends Controller
     {
         $model = new Product();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['index']);
+        if ($model->load(Yii::$app->request->post())) {
+            $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
+
+            if ($model->validate() && $model->uploadImage() && $model->save()) {
+                return $this->redirect(['index']);
+            }
         }
 
         return $this->render('create', ['model' => $model]);
@@ -58,8 +63,12 @@ class ProductController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['index']);
+        if ($model->load(Yii::$app->request->post())) {
+            $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
+
+            if ($model->validate() && $model->uploadImage() && $model->save()) {
+                return $this->redirect(['index']);
+            }
         }
 
         return $this->render('update', ['model' => $model]);
