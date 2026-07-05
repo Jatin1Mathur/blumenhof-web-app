@@ -11,7 +11,7 @@ final class HomeCest
     public function checkOpen(FunctionalTester $I): void
     {
         $I->amOnRoute('site/index');
-        $I->see('Build with Yii Framework', 'h1');
+        $I->see('Everything your shop needs, in one clean system.', 'h1');
         $I->seeLink('About');
     }
 }
