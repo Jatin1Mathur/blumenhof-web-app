@@ -38,4 +38,17 @@ $this->title = 'Production Task #' . $model->id;
     ],
 ]) ?>
 
+<h3>Change Status</h3>
+<?php $allowedStatuses = $model->getAllowedNextStatuses(); ?>
+<?php if (empty($allowedStatuses)): ?>
+    <p class="text-muted">This task is done and cannot be changed further.</p>
+<?php else: ?>
+    <?php foreach ($allowedStatuses as $nextStatus): ?>
+        <?= Html::beginForm(['change-status', 'id' => $model->id], 'post', ['style' => 'display:inline-block; margin-right: 8px;']) ?>
+            <?= Html::hiddenInput('status', $nextStatus) ?>
+            <?= Html::submitButton('Move to: ' . Html::encode($nextStatus), ['class' => 'btn btn-outline-primary']) ?>
+        <?= Html::endForm() ?>
+    <?php endforeach; ?>
+<?php endif; ?>
+
 <p><?= Html::a('Back to Order', ['order/view', 'id' => $model->order_id]) ?></p>
