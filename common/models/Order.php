@@ -29,6 +29,18 @@ class Order extends ActiveRecord
     public const STATUS_DELIVERED = 'Delivered';
     public const STATUS_COMPLETED = 'Completed';
 
+    /**
+     * Defines which statuses each status can transition to.
+     */
+    private const TRANSITIONS = [
+        self::STATUS_DRAFT => [self::STATUS_CONFIRMED],
+        self::STATUS_CONFIRMED => [self::STATUS_IN_PREPARATION, self::STATUS_DRAFT],
+        self::STATUS_IN_PREPARATION => [self::STATUS_READY],
+        self::STATUS_READY => [self::STATUS_DELIVERED],
+        self::STATUS_DELIVERED => [self::STATUS_COMPLETED],
+        self::STATUS_COMPLETED => [],
+    ];
+
     public static function tableName(): string
     {
         return 'order';
@@ -75,6 +87,36 @@ class Order extends ActiveRecord
             self::STATUS_DELIVERED,
             self::STATUS_COMPLETED,
         ];
+    }
+
+    /**
+     * Returns the statuses this order can legally transition to from its current status.
+     *
+     * @return string[]
+     */
+    public function getAllowedNextStatuses(): array
+    {
+        return self::TRANSITIONS[$this->status] ?? [];
+    }
+
+    /**
+     * Attempts to transition the order to a new status.
+     * Returns false if the transition is not allowed.
+     */
+    public function transitionTo(string $newStatus): bool
+    {
+        if (!in_array($newStatus, $this->getAllowedNextStatuses(), true)) {
+            $this->addError('status', "Cannot transition from '{$this->status}' to '{$newStatus}'.");
+            return false;
+        }
+
+        $this->status = $newStatus;
+        return $this->save(false, ['status', 'updated_at']);
+    }
+
+    public function isFinal(): bool
+    {
+        return $this->status === self::STATUS_COMPLETED;
     }
 
     public function getCompany()

@@ -17,6 +17,13 @@ if ($model->company) {
 ?>
 <h1><?= Html::encode($this->title) ?></h1>
 
+<?php if (Yii::$app->session->hasFlash('success')): ?>
+    <div class="alert alert-success"><?= Html::encode(Yii::$app->session->getFlash('success')) ?></div>
+<?php endif; ?>
+<?php if (Yii::$app->session->hasFlash('error')): ?>
+    <div class="alert alert-danger"><?= Html::encode(Yii::$app->session->getFlash('error')) ?></div>
+<?php endif; ?>
+
 <?= DetailView::widget([
     'model' => $model,
     'attributes' => [
@@ -36,6 +43,19 @@ if ($model->company) {
         ],
     ],
 ]) ?>
+
+<h3>Change Status</h3>
+<?php $allowedStatuses = $model->getAllowedNextStatuses(); ?>
+<?php if (empty($allowedStatuses)): ?>
+    <p class="text-muted">This order is in its final status and cannot be changed further.</p>
+<?php else: ?>
+    <?php foreach ($allowedStatuses as $nextStatus): ?>
+        <?= Html::beginForm(['change-status', 'id' => $model->id], 'post', ['style' => 'display:inline-block; margin-right: 8px;']) ?>
+            <?= Html::hiddenInput('status', $nextStatus) ?>
+            <?= Html::submitButton('Move to: ' . Html::encode($nextStatus), ['class' => 'btn btn-outline-primary']) ?>
+        <?= Html::endForm() ?>
+    <?php endforeach; ?>
+<?php endif; ?>
 
 <h3>Items</h3>
 <table class="table">
