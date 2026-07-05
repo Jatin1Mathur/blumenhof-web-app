@@ -13,6 +13,11 @@ $this->title = $model->name;
 <?= DetailView::widget([
     'model' => $model,
     'attributes' => [
-        'name', 'address', 'city', 'postal_code', 'country', 'phone', 'email', 'notes',
+        'name',
+        [
+            'label' => 'Category',
+            'value' => $model->category ? $model->category->name : '-',
+        ],
+        'address', 'city', 'postal_code', 'country', 'phone', 'email', 'notes',
     ],
 ]) ?>
