@@ -63,7 +63,17 @@ class SignupForm extends Model
         $user->generateAuthKey();
         $user->generateEmailVerificationToken();
 
-        return $user->save() && $this->sendEmail($mailer, $user, $supportEmail, $appName);
+        if (!$user->save()) {
+            return false;
+        }
+
+        // RBAC decision (Phase 1, Step 8 — ADR): no automatic role assignment on signup.
+        // New accounts intentionally start with zero privileges (least-privilege default).
+        // A manager/admin must explicitly assign a role via auth_assignment before this
+        // user can access any protected module. Do NOT add Yii::$app->authManager->assign()
+        // here without revisiting that decision first.
+
+        return $this->sendEmail($mailer, $user, $supportEmail, $appName);
     }
 
     /**
@@ -88,4 +98,6 @@ class SignupForm extends Model
             ->setSubject('Account registration at ' . $appName)
             ->send();
     }
+
+
 }
