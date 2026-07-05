@@ -13,14 +13,15 @@ $this->title = 'Products';
 
 <table class="table">
     <thead>
-        <tr><th>Name</th><th>Category</th><th>Price</th><th>Perishable</th><th>Actions</th></tr>
+        <tr><th>Name</th><th>Category</th><th>Price</th><th>Stock</th><th>Perishable</th><th>Actions</th></tr>
     </thead>
     <tbody>
     <?php foreach ($products as $product): ?>
-        <tr>
+        <tr class="<?= ($product->stock && $product->stock->isLowStock()) ? 'table-danger' : '' ?>">
             <td><?= Html::encode($product->name) ?></td>
             <td><?= $product->category ? Html::encode($product->category->name) : '-' ?></td>
             <td><?= Html::encode(number_format((float) $product->price, 2)) ?></td>
+            <td><?= $product->stock ? Html::encode($product->stock->quantity) : '-' ?></td>
             <td><?= $product->is_perishable ? 'Yes' : 'No' ?></td>
             <td>
                 <?= Html::a('View', ['view', 'id' => $product->id]) ?> |
