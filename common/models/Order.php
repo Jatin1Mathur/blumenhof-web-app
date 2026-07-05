@@ -29,6 +29,15 @@ class Order extends ActiveRecord
     public const STATUS_DELIVERED = 'Delivered';
     public const STATUS_COMPLETED = 'Completed';
 
+    private const TRANSITIONS = [
+        self::STATUS_DRAFT => [self::STATUS_CONFIRMED],
+        self::STATUS_CONFIRMED => [self::STATUS_IN_PREPARATION, self::STATUS_DRAFT],
+        self::STATUS_IN_PREPARATION => [self::STATUS_READY],
+        self::STATUS_READY => [self::STATUS_DELIVERED],
+        self::STATUS_DELIVERED => [self::STATUS_COMPLETED],
+        self::STATUS_COMPLETED => [],
+    ];
+
     public static function tableName(): string
     {
         return 'order';
@@ -54,7 +63,7 @@ class Order extends ActiveRecord
             [['customer_company_id'], 'exist', 'targetClass' => CustomerCompany::class, 'targetAttribute' => 'id'],
             [['customer_contact_id'], 'exist', 'targetClass' => CustomerContact::class, 'targetAttribute' => 'id'],
             [['user_id'], 'exist', 'targetClass' => User::class, 'targetAttribute' => 'id'],
-            ['customer_company_id', 'validateCustomerLinked'],
+            ['customer_company_id', 'validateCustomerLinked', 'skipOnEmpty' => false],
         ];
     }
 
@@ -75,6 +84,27 @@ class Order extends ActiveRecord
             self::STATUS_DELIVERED,
             self::STATUS_COMPLETED,
         ];
+    }
+
+    public function getAllowedNextStatuses(): array
+    {
+        return self::TRANSITIONS[$this->status] ?? [];
+    }
+
+    public function transitionTo(string $newStatus): bool
+    {
+        if (!in_array($newStatus, $this->getAllowedNextStatuses(), true)) {
+            $this->addError('status', "Cannot transition from '{$this->status}' to '{$newStatus}'.");
+            return false;
+        }
+
+        $this->status = $newStatus;
+        return $this->save(false, ['status', 'updated_at']);
+    }
+
+    public function isFinal(): bool
+    {
+        return $this->status === self::STATUS_COMPLETED;
     }
 
     public function getCompany()

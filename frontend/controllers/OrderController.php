@@ -113,6 +113,20 @@ class OrderController extends Controller
         ]);
     }
 
+    public function actionChangeStatus(int $id)
+    {
+        $model = $this->findModel($id);
+        $newStatus = Yii::$app->request->post('status');
+
+        if ($newStatus !== null && $model->transitionTo($newStatus)) {
+            Yii::$app->session->setFlash('success', "Order status changed to {$newStatus}.");
+        } else {
+            $errors = $model->getErrors('status');
+            Yii::$app->session->setFlash('error', $errors ? implode(' ', $errors) : 'Unable to change status.');
+        }
+
+        return $this->redirect(['view', 'id' => $model->id]);
+    }
     public function actionDelete(int $id)
     {
         $this->findModel($id)->delete();
