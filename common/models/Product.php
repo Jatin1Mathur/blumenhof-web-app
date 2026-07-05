@@ -6,6 +6,8 @@ namespace common\models;
 
 use yii\db\ActiveRecord;
 use yii\behaviors\TimestampBehavior;
+use Yii;
+use yii\web\UploadedFile;
 
 /**
  * This is the model class for table "product".
@@ -22,6 +24,11 @@ use yii\behaviors\TimestampBehavior;
  */
 class Product extends ActiveRecord
 {
+    /**
+     * @var UploadedFile|null Used only for handling the upload; not persisted directly.
+     */
+    public $imageFile;
+
     public static function tableName(): string
     {
         return 'product';
@@ -46,6 +53,7 @@ class Product extends ActiveRecord
             [['image_path'], 'string', 'max' => 255],
             [['product_category_id'], 'integer'],
             [['product_category_id'], 'exist', 'targetClass' => ProductCategory::class, 'targetAttribute' => 'id'],
+            [['imageFile'], 'file', 'extensions' => 'png, jpg, jpeg', 'maxSize' => 1024 * 1024 * 2, 'skipOnEmpty' => true],
         ];
     }
 
@@ -57,5 +65,31 @@ class Product extends ActiveRecord
     public function getStock()
     {
         return $this->hasOne(InventoryStock::class, ['product_id' => 'id']);
+    }
+
+    /**
+     * Handles saving the uploaded image file to disk and updating image_path.
+     * Call this after the model has been loaded and validated, before/after save().
+     */
+    public function uploadImage(): bool
+    {
+        if ($this->imageFile === null) {
+            return true;
+        }
+
+        $uploadDir = Yii::getAlias('@frontend/web/uploads/products');
+        if (!is_dir($uploadDir)) {
+            mkdir($uploadDir, 0755, true);
+        }
+
+        $fileName = uniqid('product_', true) . '.' . $this->imageFile->extension;
+        $filePath = $uploadDir . DIRECTORY_SEPARATOR . $fileName;
+
+        if ($this->imageFile->saveAs($filePath)) {
+            $this->image_path = 'uploads/products/' . $fileName;
+            return true;
+        }
+
+        return false;
     }
 }

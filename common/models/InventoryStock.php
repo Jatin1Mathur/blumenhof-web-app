@@ -20,6 +20,11 @@ use yii\behaviors\TimestampBehavior;
  */
 class InventoryStock extends ActiveRecord
 {
+    /**
+     * Number of days before expiry to start warning.
+     */
+    public const EXPIRY_WARNING_DAYS = 3;
+
     public static function tableName(): string
     {
         return 'inventory_stock';
@@ -53,5 +58,44 @@ class InventoryStock extends ActiveRecord
     public function isLowStock(): bool
     {
         return $this->quantity <= $this->low_stock_threshold;
+    }
+
+    public function isExpiringSoon(): bool
+    {
+        if (empty($this->expiry_date)) {
+            return false;
+        }
+
+        $daysUntilExpiry = (strtotime($this->expiry_date) - strtotime('today')) / 86400;
+
+        return $daysUntilExpiry >= 0 && $daysUntilExpiry <= self::EXPIRY_WARNING_DAYS;
+    }
+
+    public function isExpired(): bool
+    {
+        if (empty($this->expiry_date)) {
+            return false;
+        }
+
+        return strtotime($this->expiry_date) < strtotime('today');
+    }
+
+    public function needsWarning(): bool
+    {
+        return $this->isLowStock() || $this->isExpiringSoon() || $this->isExpired();
+    }
+
+    /**
+     * Returns all inventory_stock records that need a warning
+     * (low stock, expiring soon, or expired).
+     *
+     * @return static[]
+     */
+    public static function findNeedingWarning(): array
+    {
+        return array_values(array_filter(
+            static::find()->all(),
+            static fn (self $stock) => $stock->needsWarning()
+        ));
     }
 }
