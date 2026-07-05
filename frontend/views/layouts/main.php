@@ -22,6 +22,7 @@ AppAsset::register($this);
 <body class="d-flex flex-column min-vh-100">
 <?php $this->beginBody() ?>
 <?= $this->render('_header') ?>
+<?= $this->render('_sidebar') ?>
 <main id="main" class="flex-shrink-0" role="main">
     <?php if (!empty($this->params['breadcrumbs'])): ?>
         <div class="container mt-3">

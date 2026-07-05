@@ -1,17 +1,10 @@
 <?php
+
 declare(strict_types=1);
 
 use yii\helpers\Html;
 
 $currentRoute = Yii::$app->controller->route;
-$hasInternalLinks = !Yii::$app->user->isGuest && (
-    Yii::$app->user->can('viewDashboard') || Yii::$app->user->can('manageDashboard') ||
-    Yii::$app->user->can('viewCustomers') || Yii::$app->user->can('manageCustomers') ||
-    Yii::$app->user->can('viewCatalog') || Yii::$app->user->can('manageCatalog') ||
-    Yii::$app->user->can('viewOrders') || Yii::$app->user->can('manageOrders') ||
-    Yii::$app->user->can('viewProduction') || Yii::$app->user->can('manageProduction') ||
-    Yii::$app->user->can('viewAdmin') || Yii::$app->user->can('manageAdmin')
-);
 ?>
 
 <header class="blumen-header">
@@ -46,56 +39,17 @@ $hasInternalLinks = !Yii::$app->user->isGuest && (
                             'class' => $currentRoute === 'site/impressum' ? 'active' : ''
                         ]) ?>
                     </nav>
-
-                    <?php if ($hasInternalLinks): ?>
-                        <nav class="header-internal-nav">
-                            <span class="internal-nav-label">Internal</span>
-                            <?php if (Yii::$app->user->can('viewDashboard') || Yii::$app->user->can('manageDashboard')): ?>
-                                <?= Html::a('Dashboard', ['/site/dashboard'], [
-                                    'class' => $currentRoute === 'site/dashboard' ? 'active' : '',
-                                ]) ?>
-                            <?php endif; ?>
-
-                            <?php if (Yii::$app->user->can('viewCustomers') || Yii::$app->user->can('manageCustomers')): ?>
-                                <?= Html::a('Customers', ['/site/customers'], [
-                                    'class' => $currentRoute === 'site/customers' ? 'active' : '',
-                                ]) ?>
-                            <?php endif; ?>
-
-                            <?php if (Yii::$app->user->can('viewCatalog') || Yii::$app->user->can('manageCatalog')): ?>
-                                <?= Html::a('Catalog', ['/site/catalog'], [
-                                    'class' => $currentRoute === 'site/catalog' ? 'active' : '',
-                                ]) ?>
-                            <?php endif; ?>
-
-                            <?php if (Yii::$app->user->can('viewOrders') || Yii::$app->user->can('manageOrders')): ?>
-                                <?= Html::a('Orders', ['/site/orders'], [
-                                    'class' => $currentRoute === 'site/orders' ? 'active' : '',
-                                ]) ?>
-                            <?php endif; ?>
-
-                            <?php if (Yii::$app->user->can('viewProduction') || Yii::$app->user->can('manageProduction')): ?>
-                                <?= Html::a('Production', ['/site/production'], [
-                                    'class' => $currentRoute === 'site/production' ? 'active' : '',
-                                ]) ?>
-                            <?php endif; ?>
-
-                            <?php if (Yii::$app->user->can('viewAdmin') || Yii::$app->user->can('manageAdmin')): ?>
-                                <?= Html::a('Admin', ['/site/admin'], [
-                                    'class' => $currentRoute === 'site/admin' ? 'active' : '',
-                                ]) ?>
-                            <?php endif; ?>
-                        </nav>
-                    <?php endif; ?>
                 </div>
 
                 <!-- Center logo space -->
                 <div class="header-logo-area">
-                    <div class="header-logo-box">
-                        <span class="logo-flower">🌷</span>
-                    </div>
-                    <div class="header-brand-name">BLUMENHOF</div>
-                    <div class="header-brand-subtitle">FLORIST MANAGEMENT</div>
+                    <?= Html::a(
+                        Html::img('@web/images/blumenhof-logo.svg', [
+                            'alt' => 'Blumenhof',
+                            'class' => 'header-logo-img',
+                        ]),
+                        ['/site/index']
+                    ) ?>
                 </div>
 
                 <!-- Right links -->
@@ -116,6 +70,16 @@ $hasInternalLinks = !Yii::$app->user->isGuest && (
                         'class' => 'theme-simple-btn',
                         'aria-label' => 'Switch theme',
                     ]) ?>
+
+                    <?= Html::button(
+                        '<span></span><span></span><span></span>',
+                        [
+                            'id' => 'sidebar-toggle',
+                            'class' => 'hamburger-btn',
+                            'aria-label' => 'Open menu',
+                            'aria-expanded' => 'false',
+                        ]
+                    ) ?>
                 </nav>
 
             </div>
