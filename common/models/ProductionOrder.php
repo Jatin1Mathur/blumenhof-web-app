@@ -29,6 +29,15 @@ class ProductionOrder extends ActiveRecord
     public const SOURCE_STOCK = 'stock';
     public const SOURCE_PRODUCE = 'produce';
 
+    /**
+     * Defines which statuses each status can transition to.
+     */
+    private const TRANSITIONS = [
+        self::STATUS_PENDING => [self::STATUS_IN_PROGRESS],
+        self::STATUS_IN_PROGRESS => [self::STATUS_DONE, self::STATUS_PENDING],
+        self::STATUS_DONE => [],
+    ];
+
     public static function tableName(): string
     {
         return 'production_order';
@@ -68,6 +77,35 @@ class ProductionOrder extends ActiveRecord
     public static function sourceList(): array
     {
         return [self::SOURCE_STOCK, self::SOURCE_PRODUCE];
+    }
+
+    /**
+     * Returns the statuses this task can legally transition to from its current status.
+     *
+     * @return string[]
+     */
+    public function getAllowedNextStatuses(): array
+    {
+        return self::TRANSITIONS[$this->status] ?? [];
+    }
+
+    /**
+     * Attempts to transition the production task to a new status.
+     */
+    public function transitionTo(string $newStatus): bool
+    {
+        if (!in_array($newStatus, $this->getAllowedNextStatuses(), true)) {
+            $this->addError('status', "Cannot transition from '{$this->status}' to '{$newStatus}'.");
+            return false;
+        }
+
+        $this->status = $newStatus;
+        return $this->save(false, ['status', 'updated_at']);
+    }
+
+    public function isFinal(): bool
+    {
+        return $this->status === self::STATUS_DONE;
     }
 
     public function getOrder()

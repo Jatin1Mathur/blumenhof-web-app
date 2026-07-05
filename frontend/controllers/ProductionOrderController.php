@@ -104,6 +104,21 @@ class ProductionOrderController extends Controller
         return $this->redirect(['order/view', 'id' => $orderId]);
     }
 
+    public function actionChangeStatus(int $id)
+    {
+        $model = $this->findModel($id);
+        $newStatus = Yii::$app->request->post('status');
+
+        if ($newStatus !== null && $model->transitionTo($newStatus)) {
+            Yii::$app->session->setFlash('success', "Production task status changed to {$newStatus}.");
+        } else {
+            $errors = $model->getErrors('status');
+            Yii::$app->session->setFlash('error', $errors ? implode(' ', $errors) : 'Unable to change status.');
+        }
+
+        return $this->redirect(['view', 'id' => $model->id]);
+    }
+
     /**
      * Decides whether an order can be fulfilled from existing stock, or needs
      * fresh production. If ANY item in the order doesn't have sufficient
