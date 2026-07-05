@@ -2,12 +2,15 @@
 
 use frontend\assets\DashboardAsset;
 use yii\helpers\Html;
+use yii\helpers\Url;
 
 /** @var yii\web\View $this */
 
 DashboardAsset::register($this);
 
 $this->title = 'Dashboard';
+
+$ordersSummaryUrl = Url::to(['dashboard/orders-summary-data']);
 ?>
 <h1><?= Html::encode($this->title) ?></h1>
 
@@ -39,3 +42,29 @@ $this->title = 'Dashboard';
         <div id="lostClientsList"></div>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    fetch('<?= $ordersSummaryUrl ?>')
+        .then(function (response) { return response.json(); })
+        .then(function (data) {
+            var ctx = document.getElementById('ordersSummaryChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: data.labels,
+                    datasets: [{
+                        label: 'Orders',
+                        data: data.data,
+                        backgroundColor: ['#4e79a7', '#f28e2b', '#e15759'],
+                    }],
+                },
+                options: {
+                    responsive: true,
+                    plugins: { legend: { display: false } },
+                    scales: { y: { beginAtZero: true, ticks: { precision: 0 } } },
+                },
+            });
+        });
+});
+</script>
