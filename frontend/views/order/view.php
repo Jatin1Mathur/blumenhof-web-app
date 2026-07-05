@@ -1,5 +1,7 @@
 <?php
 
+use common\models\Order;
+use common\models\ProductionOrder;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 
@@ -14,6 +16,8 @@ if ($model->company) {
 } elseif ($model->contact) {
     $customerLabel = $model->contact->first_name . ' ' . $model->contact->last_name;
 }
+
+$productionOrder = ProductionOrder::findOne(['order_id' => $model->id]);
 ?>
 <h1><?= Html::encode($this->title) ?></h1>
 
@@ -55,6 +59,22 @@ if ($model->company) {
             <?= Html::submitButton('Move to: ' . Html::encode($nextStatus), ['class' => 'btn btn-outline-primary']) ?>
         <?= Html::endForm() ?>
     <?php endforeach; ?>
+<?php endif; ?>
+
+<h3>Production</h3>
+<?php if ($productionOrder !== null): ?>
+    <p>
+        Production task already exists:
+        <?= Html::a('View Production Task #' . $productionOrder->id, ['production-order/view', 'id' => $productionOrder->id]) ?>
+        (Status: <?= Html::encode($productionOrder->status) ?>)
+    </p>
+<?php elseif ($model->status === Order::STATUS_CONFIRMED): ?>
+    <?= Html::a('Generate Production Task', ['production-order/generate', 'orderId' => $model->id], [
+        'class' => 'btn btn-primary',
+        'data' => ['method' => 'post', 'confirm' => 'Generate a production task for this order?'],
+    ]) ?>
+<?php else: ?>
+    <p class="text-muted">Order must be Confirmed before a production task can be generated.</p>
 <?php endif; ?>
 
 <h3>Items</h3>
