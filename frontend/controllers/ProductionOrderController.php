@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace frontend\controllers;
 
+use common\models\InventoryStock;
 use common\models\Order;
 use common\models\ProductionOrder;
 use Yii;
@@ -38,6 +39,25 @@ class ProductionOrderController extends Controller
         return $this->render('index', ['productionOrders' => $productionOrders]);
     }
 
+    /**
+     * Groups pending/in-progress production tasks by batch_date for same-day prep runs.
+     */
+    public function actionBatches()
+    {
+        $productionOrders = ProductionOrder::find()
+            ->where(['in', 'status', [ProductionOrder::STATUS_PENDING, ProductionOrder::STATUS_IN_PROGRESS]])
+            ->orderBy(['batch_date' => SORT_ASC])
+            ->all();
+
+        $batches = [];
+        foreach ($productionOrders as $po) {
+            $key = $po->batch_date ?? 'Unscheduled';
+            $batches[$key][] = $po;
+        }
+
+        return $this->render('batches', ['batches' => $batches]);
+    }
+
     public function actionView(int $id)
     {
         return $this->render('view', ['model' => $this->findModel($id)]);
@@ -45,6 +65,9 @@ class ProductionOrderController extends Controller
 
     /**
      * Generates a production task for a confirmed order that doesn't have one yet.
+     * Automatically decides stock vs produce based on inventory availability,
+     * and assigns a batch date (today's date, or the order's delivery date if
+     * that's sooner) for same-day batching.
      */
     public function actionGenerate(int $orderId)
     {
@@ -69,15 +92,34 @@ class ProductionOrderController extends Controller
         $productionOrder->order_id = $orderId;
         $productionOrder->user_id = Yii::$app->user->id;
         $productionOrder->status = ProductionOrder::STATUS_PENDING;
-        $productionOrder->source = ProductionOrder::SOURCE_PRODUCE;
+        $productionOrder->source = $this->decideSource($order);
+        $productionOrder->batch_date = $order->delivery_date ?? date('Y-m-d');
 
         if ($productionOrder->save()) {
-            Yii::$app->session->setFlash('success', 'Production task generated.');
+            Yii::$app->session->setFlash('success', 'Production task generated (source: ' . $productionOrder->source . ').');
             return $this->redirect(['view', 'id' => $productionOrder->id]);
         }
 
         Yii::$app->session->setFlash('error', 'Unable to generate production task.');
         return $this->redirect(['order/view', 'id' => $orderId]);
+    }
+
+    /**
+     * Decides whether an order can be fulfilled from existing stock, or needs
+     * fresh production. If ANY item in the order doesn't have sufficient
+     * stock, the whole task is marked as 'produce'.
+     */
+    protected function decideSource(Order $order): string
+    {
+        foreach ($order->items as $item) {
+            $stock = InventoryStock::findOne(['product_id' => $item->product_id]);
+
+            if ($stock === null || $stock->quantity < $item->quantity) {
+                return ProductionOrder::SOURCE_PRODUCE;
+            }
+        }
+
+        return ProductionOrder::SOURCE_STOCK;
     }
 
     public function actionUpdate(int $id)
