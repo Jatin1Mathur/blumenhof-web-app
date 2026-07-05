@@ -13,6 +13,7 @@ $this->title = 'Dashboard';
 $ordersSummaryUrl = Url::to(['dashboard/orders-summary-data']);
 $topProductsUrl = Url::to(['dashboard/top-products-data']);
 $topCustomersUrl = Url::to(['dashboard/top-customers-data']);
+$stockProductionUrl = Url::to(['dashboard/stock-production-data']);
 ?>
 <h1><?= Html::encode($this->title) ?></h1>
 
@@ -33,13 +34,17 @@ $topCustomersUrl = Url::to(['dashboard/top-customers-data']);
         <canvas id="topCustomersChart"></canvas>
     </div>
     <div class="col-md-6">
-        <h3>Stock &amp; Production Overview</h3>
-        <canvas id="stockProductionChart"></canvas>
+        <h3>Stock Overview</h3>
+        <canvas id="stockChart"></canvas>
     </div>
 </div>
 
 <div class="row mt-4">
-    <div class="col-md-12">
+    <div class="col-md-6">
+        <h3>Production Overview</h3>
+        <canvas id="productionChart"></canvas>
+    </div>
+    <div class="col-md-6">
         <h3>Lost Clients</h3>
         <div id="lostClientsList"></div>
     </div>
@@ -112,6 +117,36 @@ document.addEventListener('DOMContentLoaded', function () {
                     plugins: { legend: { display: false } },
                     scales: { x: { beginAtZero: true, ticks: { precision: 0 } } },
                 },
+            });
+        });
+
+    fetch('<?= $stockProductionUrl ?>')
+        .then(function (response) { return response.json(); })
+        .then(function (data) {
+            var stockCtx = document.getElementById('stockChart').getContext('2d');
+            new Chart(stockCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: data.stock.labels,
+                    datasets: [{
+                        data: data.stock.data,
+                        backgroundColor: ['#f28e2b', '#edc948', '#e15759'],
+                    }],
+                },
+                options: { responsive: true },
+            });
+
+            var productionCtx = document.getElementById('productionChart').getContext('2d');
+            new Chart(productionCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: data.production.labels,
+                    datasets: [{
+                        data: data.production.data,
+                        backgroundColor: ['#bab0ac', '#4e79a7', '#59a14f'],
+                    }],
+                },
+                options: { responsive: true },
             });
         });
 });
