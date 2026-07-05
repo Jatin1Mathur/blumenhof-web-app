@@ -11,6 +11,8 @@ DashboardAsset::register($this);
 $this->title = 'Dashboard';
 
 $ordersSummaryUrl = Url::to(['dashboard/orders-summary-data']);
+$topProductsUrl = Url::to(['dashboard/top-products-data']);
+$topCustomersUrl = Url::to(['dashboard/top-customers-data']);
 ?>
 <h1><?= Html::encode($this->title) ?></h1>
 
@@ -63,6 +65,52 @@ document.addEventListener('DOMContentLoaded', function () {
                     responsive: true,
                     plugins: { legend: { display: false } },
                     scales: { y: { beginAtZero: true, ticks: { precision: 0 } } },
+                },
+            });
+        });
+
+    fetch('<?= $topProductsUrl ?>')
+        .then(function (response) { return response.json(); })
+        .then(function (data) {
+            var ctx = document.getElementById('topProductsChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: data.labels,
+                    datasets: [{
+                        label: 'Units Ordered',
+                        data: data.data,
+                        backgroundColor: '#59a14f',
+                    }],
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    plugins: { legend: { display: false } },
+                    scales: { x: { beginAtZero: true, ticks: { precision: 0 } } },
+                },
+            });
+        });
+
+    fetch('<?= $topCustomersUrl ?>')
+        .then(function (response) { return response.json(); })
+        .then(function (data) {
+            var ctx = document.getElementById('topCustomersChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: data.labels,
+                    datasets: [{
+                        label: 'Orders',
+                        data: data.data,
+                        backgroundColor: '#af7aa1',
+                    }],
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    plugins: { legend: { display: false } },
+                    scales: { x: { beginAtZero: true, ticks: { precision: 0 } } },
                 },
             });
         });
