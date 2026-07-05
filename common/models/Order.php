@@ -66,7 +66,7 @@ class Order extends ActiveRecord
             [['customer_company_id'], 'exist', 'targetClass' => CustomerCompany::class, 'targetAttribute' => 'id'],
             [['customer_contact_id'], 'exist', 'targetClass' => CustomerContact::class, 'targetAttribute' => 'id'],
             [['user_id'], 'exist', 'targetClass' => User::class, 'targetAttribute' => 'id'],
-            ['customer_company_id', 'validateCustomerLinked'],
+            ['customer_company_id', 'validateCustomerLinked', 'skipOnEmpty' => false],
         ];
     }
 
