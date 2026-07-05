@@ -1,7 +1,9 @@
 <?php
+
 declare(strict_types=1);
 
 use frontend\assets\AppAsset;
+use yii\bootstrap5\Alert;
 use yii\bootstrap5\Breadcrumbs;
 use yii\helpers\Html;
 
@@ -17,24 +19,26 @@ AppAsset::register($this);
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
 </head>
-
 <body class="d-flex flex-column min-vh-100">
 <?php $this->beginBody() ?>
-
 <?= $this->render('_header') ?>
-
 <main id="main" class="flex-shrink-0" role="main">
     <?php if (!empty($this->params['breadcrumbs'])): ?>
         <div class="container mt-3">
             <?= Breadcrumbs::widget(['links' => $this->params['breadcrumbs']]) ?>
         </div>
     <?php endif; ?>
-
+    <div class="container mt-3">
+        <?php foreach (Yii::$app->session->getAllFlashes() as $type => $message): ?>
+            <?= Alert::widget([
+                'options' => ['class' => 'alert-' . $type],
+                'body' => is_array($message) ? implode('<br>', $message) : $message,
+            ]) ?>
+        <?php endforeach; ?>
+    </div>
     <?= $content ?>
 </main>
-
 <?= $this->render('_footer') ?>
-
 <?php $this->endBody() ?>
 </body>
 </html>
