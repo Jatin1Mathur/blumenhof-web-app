@@ -146,9 +146,12 @@ class OrderController extends Controller
 
     protected function validateItems(array $itemModels): bool
     {
+        // order_id is intentionally excluded here: it isn't known until the
+        // parent Order has been saved (see actionCreate/actionUpdate), so
+        // validating it at this stage would always fail for new items.
         $valid = true;
         foreach ($itemModels as $itemModel) {
-            $valid = $itemModel->validate() && $valid;
+            $valid = $itemModel->validate(['product_id', 'quantity', 'unit_price']) && $valid;
         }
         return $valid;
     }
