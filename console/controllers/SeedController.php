@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace console\controllers;
 
+use common\models\CustomerCategory;
 use common\models\CustomerCompany;
 use common\models\CustomerContact;
+use common\models\InventoryStock;
 use common\models\Order;
 use common\models\OrderItem;
 use common\models\Product;
 use common\models\ProductCategory;
+use common\models\User;
 use yii\console\Controller;
 use yii\console\ExitCode;
 
@@ -23,15 +26,14 @@ class SeedController extends Controller
     public function actionDemo(): int
     {
         $this->stdout("Seeding demo data...\n");
-
         $categories = $this->seedCategories();
         $products = $this->seedProducts($categories);
-        $companies = $this->seedCompanies();
+        $customerCategories = $this->seedCustomerCategories();
+        $companies = $this->seedCompanies($customerCategories);
         $contacts = $this->seedContacts($companies);
+        $this->seedInventoryStock($products);
         $this->seedOrders($companies, $contacts, $products);
-
         $this->stdout("Demo data seeded successfully.\n");
-
         return ExitCode::OK;
     }
 
@@ -82,20 +84,49 @@ class SeedController extends Controller
         return $products;
     }
 
-    protected function seedCompanies(): array
+    protected function seedCustomerCategories(): array
+    {
+        $names = [
+            'Hotel' => 'Hotel and hospitality clients',
+            'Event Planner' => 'Event planning and coordination businesses',
+            'Corporate' => 'Corporate and business clients',
+            'Individual' => 'Individual/private customers',
+        ];
+        $categories = [];
+
+        foreach ($names as $name => $description) {
+            $category = CustomerCategory::findOne(['name' => $name]) ?? new CustomerCategory();
+            $category->name = $name;
+            $category->description = $description;
+            $category->save();
+            $categories[] = $category;
+        }
+
+        $this->stdout("  Seeded " . count($categories) . " customer categories.\n");
+
+        return $categories;
+    }
+
+    protected function seedCompanies(array $customerCategories): array
     {
         $sampleCompanies = [
-            ['Grand Hotel Hof', 'Hof', 'Germany'],
-            ['Elegant Events GmbH', 'Munich', 'Germany'],
-            ['Corporate Blooms AG', 'Berlin', 'Germany'],
+            ['Grand Hotel Hof', 'Hof', 'Germany', 'Hotel'],
+            ['Elegant Events GmbH', 'Munich', 'Germany', 'Event Planner'],
+            ['Corporate Blooms AG', 'Berlin', 'Germany', 'Corporate'],
         ];
 
+        $categoryByName = [];
+        foreach ($customerCategories as $category) {
+            $categoryByName[$category->name] = $category->id;
+        }
+
         $companies = [];
-        foreach ($sampleCompanies as [$name, $city, $country]) {
+        foreach ($sampleCompanies as [$name, $city, $country, $categoryName]) {
             $company = CustomerCompany::findOne(['name' => $name]) ?? new CustomerCompany();
             $company->name = $name;
             $company->city = $city;
             $company->country = $country;
+            $company->customer_category_id = $categoryByName[$categoryName] ?? null;
             $company->save();
             $companies[] = $company;
         }
@@ -128,18 +159,41 @@ class SeedController extends Controller
         return $contacts;
     }
 
+    protected function seedInventoryStock(array $products): void
+    {
+        $count = 0;
+        foreach ($products as $index => $product) {
+            $stock = InventoryStock::findOne(['product_id' => $product->id]) ?? new InventoryStock();
+            $stock->product_id = $product->id;
+            // Vary quantities so both healthy and low-stock states are demonstrated.
+            $stock->quantity = ($index % 3 === 0) ? 3 : 25;
+            $stock->low_stock_threshold = 5;
+            $stock->save();
+            $count++;
+        }
+
+        $this->stdout("  Seeded {$count} inventory stock records.\n");
+    }
+
     protected function seedOrders(array $companies, array $contacts, array $products): void
     {
         $statuses = Order::statusList();
         $count = 0;
 
+        // Use the first available user as the order owner, rather than a
+        // hardcoded id that may not exist in every environment.
+        $ownerUserId = User::find()->orderBy(['id' => SORT_ASC])->scalar();
+        if ($ownerUserId === false) {
+            $this->stdout("  Skipped order seeding: no users exist yet.\n");
+            return;
+        }
+
         for ($i = 0; $i < 6; $i++) {
             $order = new Order();
-            $order->user_id = 1;
+            $order->user_id = $ownerUserId;
             $order->customer_company_id = $companies[$i % count($companies)]->id;
             $order->status = $statuses[$i % count($statuses)];
             $order->delivery_date = date('Y-m-d', strtotime('+' . ($i + 1) . ' days'));
-
             if ($order->save()) {
                 $itemCount = random_int(1, 3);
                 for ($j = 0; $j < $itemCount; $j++) {
