@@ -13,12 +13,13 @@ $this->title = 'Customer Companies';
 
 <table class="table">
     <thead>
-        <tr><th>Name</th><th>City</th><th>Phone</th><th>Email</th><th>Actions</th></tr>
+        <tr><th>Name</th><th>Category</th><th>City</th><th>Phone</th><th>Email</th><th>Actions</th></tr>
     </thead>
     <tbody>
     <?php foreach ($companies as $company): ?>
         <tr>
             <td><?= Html::encode($company->name) ?></td>
+            <td><?= $company->category ? Html::encode($company->category->name) : '-' ?></td>
             <td><?= Html::encode($company->city) ?></td>
             <td><?= Html::encode($company->phone) ?></td>
             <td><?= Html::encode($company->email) ?></td>

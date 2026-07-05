@@ -12,6 +12,7 @@ use yii\behaviors\TimestampBehavior;
  *
  * @property int $id
  * @property string $name
+ * @property int|null $customer_category_id
  * @property string|null $address
  * @property string|null $city
  * @property string|null $postal_code
@@ -46,11 +47,18 @@ class CustomerCompany extends ActiveRecord
             [['phone'], 'string', 'max' => 30],
             [['notes'], 'string'],
             [['email'], 'email'],
+            [['customer_category_id'], 'integer'],
+            [['customer_category_id'], 'exist', 'targetClass' => CustomerCategory::class, 'targetAttribute' => 'id'],
         ];
     }
 
     public function getContacts()
     {
         return $this->hasMany(CustomerContact::class, ['customer_company_id' => 'id']);
+    }
+
+    public function getCategory()
+    {
+        return $this->hasOne(CustomerCategory::class, ['id' => 'customer_category_id']);
     }
 }
