@@ -40,12 +40,18 @@ class OrderItem extends ActiveRecord
             [['quantity'], 'integer', 'min' => 1],
             [['quantity'], 'default', 'value' => 1],
             [['unit_price'], 'number', 'min' => 0],
+            [['product_id'], 'exist', 'targetClass' => Product::class, 'targetAttribute' => 'id'],
         ];
     }
 
     public function getOrder()
     {
         return $this->hasOne(Order::class, ['id' => 'order_id']);
+    }
+
+    public function getProduct()
+    {
+        return $this->hasOne(Product::class, ['id' => 'product_id']);
     }
 
     public function getSubtotal(): float

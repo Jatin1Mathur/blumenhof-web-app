@@ -13,12 +13,21 @@ $this->title = 'Orders';
 
 <table class="table">
     <thead>
-        <tr><th>ID</th><th>Status</th><th>Delivery Date</th><th>Total</th><th>Actions</th></tr>
+        <tr><th>ID</th><th>Customer</th><th>Status</th><th>Delivery Date</th><th>Total</th><th>Actions</th></tr>
     </thead>
     <tbody>
     <?php foreach ($orders as $order): ?>
+        <?php
+        $customerLabel = '-';
+        if ($order->company) {
+            $customerLabel = $order->company->name;
+        } elseif ($order->contact) {
+            $customerLabel = $order->contact->first_name . ' ' . $order->contact->last_name;
+        }
+        ?>
         <tr>
             <td><?= Html::encode($order->id) ?></td>
+            <td><?= Html::encode($customerLabel) ?></td>
             <td><?= Html::encode($order->status) ?></td>
             <td><?= Html::encode($order->delivery_date ?? '-') ?></td>
             <td><?= Html::encode(number_format($order->getTotal(), 2)) ?></td>

@@ -51,6 +51,9 @@ class Order extends ActiveRecord
             [['status'], 'in', 'range' => self::statusList()],
             [['delivery_date'], 'date', 'format' => 'php:Y-m-d'],
             [['notes'], 'string'],
+            [['customer_company_id'], 'exist', 'targetClass' => CustomerCompany::class, 'targetAttribute' => 'id'],
+            [['customer_contact_id'], 'exist', 'targetClass' => CustomerContact::class, 'targetAttribute' => 'id'],
+            [['user_id'], 'exist', 'targetClass' => User::class, 'targetAttribute' => 'id'],
             ['customer_company_id', 'validateCustomerLinked'],
         ];
     }
@@ -72,6 +75,21 @@ class Order extends ActiveRecord
             self::STATUS_DELIVERED,
             self::STATUS_COMPLETED,
         ];
+    }
+
+    public function getCompany()
+    {
+        return $this->hasOne(CustomerCompany::class, ['id' => 'customer_company_id']);
+    }
+
+    public function getContact()
+    {
+        return $this->hasOne(CustomerContact::class, ['id' => 'customer_contact_id']);
+    }
+
+    public function getOwner()
+    {
+        return $this->hasOne(User::class, ['id' => 'user_id']);
     }
 
     public function getItems()
