@@ -1,5 +1,6 @@
 <?php
 
+use common\models\ProductionOrder;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 
@@ -7,6 +8,8 @@ use yii\widgets\DetailView;
 /** @var common\models\Order $model */
 
 $this->title = 'Order #' . $model->id;
+
+$productionOrder = ProductionOrder::findOne(['order_id' => $model->id]);
 ?>
 <h1><?= Html::encode($this->title) ?></h1>
 
@@ -25,6 +28,22 @@ $this->title = 'Order #' . $model->id;
         ],
     ],
 ]) ?>
+
+<h3>Production</h3>
+<?php if ($productionOrder !== null): ?>
+    <p>
+        Production task already exists:
+        <?= Html::a('View Production Task #' . $productionOrder->id, ['production-order/view', 'id' => $productionOrder->id]) ?>
+        (Status: <?= Html::encode($productionOrder->status) ?>)
+    </p>
+<?php elseif ($model->status === \common\models\Order::STATUS_CONFIRMED): ?>
+    <?= Html::a('Generate Production Task', ['production-order/generate', 'orderId' => $model->id], [
+        'class' => 'btn btn-primary',
+        'data' => ['method' => 'post', 'confirm' => 'Generate a production task for this order?'],
+    ]) ?>
+<?php else: ?>
+    <p class="text-muted">Order must be Confirmed before a production task can be generated.</p>
+<?php endif; ?>
 
 <h3>Items</h3>
 <table class="table">
