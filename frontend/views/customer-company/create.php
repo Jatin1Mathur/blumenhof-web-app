@@ -1,0 +1,10 @@
+<?php
+
+/** @var yii\web\View $this */
+/** @var common\models\CustomerCompany $model */
+
+$this->title = 'New Company';
+?>
+<h1><?= Html::encode($this->title) ?></h1>
+
+<?= $this->render('_form', ['model' => $model]) ?>
