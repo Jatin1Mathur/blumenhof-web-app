@@ -14,6 +14,7 @@ $ordersSummaryUrl = Url::to(['dashboard/orders-summary-data']);
 $topProductsUrl = Url::to(['dashboard/top-products-data']);
 $topCustomersUrl = Url::to(['dashboard/top-customers-data']);
 $stockProductionUrl = Url::to(['dashboard/stock-production-data']);
+$lostClientsUrl = Url::to(['dashboard/lost-clients-data']);
 ?>
 <h1><?= Html::encode($this->title) ?></h1>
 
@@ -45,8 +46,14 @@ $stockProductionUrl = Url::to(['dashboard/stock-production-data']);
         <canvas id="productionChart"></canvas>
     </div>
     <div class="col-md-6">
-        <h3>Lost Clients</h3>
-        <div id="lostClientsList"></div>
+        <h3>Lost Clients (no order in 1-3 months)</h3>
+        <table class="table" id="lostClientsTable">
+            <thead>
+                <tr><th>Company</th><th>Last Order</th></tr>
+            </thead>
+            <tbody id="lostClientsBody">
+            </tbody>
+        </table>
     </div>
 </div>
 
@@ -147,6 +154,28 @@ document.addEventListener('DOMContentLoaded', function () {
                     }],
                 },
                 options: { responsive: true },
+            });
+        });
+
+    fetch('<?= $lostClientsUrl ?>')
+        .then(function (response) { return response.json(); })
+        .then(function (clients) {
+            var tbody = document.getElementById('lostClientsBody');
+
+            if (clients.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="2">No lost clients right now.</td></tr>';
+                return;
+            }
+
+            clients.forEach(function (client) {
+                var row = document.createElement('tr');
+                var nameCell = document.createElement('td');
+                var dateCell = document.createElement('td');
+                nameCell.textContent = client.name;
+                dateCell.textContent = client.lastOrder;
+                row.appendChild(nameCell);
+                row.appendChild(dateCell);
+                tbody.appendChild(row);
             });
         });
 });
