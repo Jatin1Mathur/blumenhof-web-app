@@ -13,6 +13,7 @@ $canStock = !$isGuest && ($user->can('inventoryEmployee') || $user->can('manager
 $canOrders = !$isGuest && ($user->can('salesEmployee') || $user->can('financialEmployee') || $user->can('manager') || $user->can('owner') || $user->can('admin'));
 $canProduction = !$isGuest && ($user->can('inventoryEmployee') || $user->can('manager') || $user->can('owner') || $user->can('admin'));
 $canDashboard = !$isGuest && ($user->can('manager') || $user->can('owner') || $user->can('admin'));
+$canManageUsers = !$isGuest && $user->can('manageUsers');
 ?>
 
 <div id="sidebar-overlay" class="sidebar-overlay"></div>
@@ -47,6 +48,13 @@ $canDashboard = !$isGuest && ($user->can('manager') || $user->can('owner') || $u
             <?php if ($canDashboard): ?>
                 <?= Html::a('📊 Dashboard', ['/dashboard/index']) ?>
             <?php endif; ?>
+        </nav>
+    <?php endif; ?>
+
+    <?php if ($canManageUsers): ?>
+        <div class="sidebar-section-label">Administration</div>
+        <nav class="sidebar-nav">
+            <?= Html::a('🔑 User Management', ['/user/index']) ?>
         </nav>
     <?php endif; ?>
 

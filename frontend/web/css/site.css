@@ -838,3 +838,321 @@ table.table thead th {
 body, .card, .border, .btn, .shop-style-footer {
     transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 }
+
+/* ================= Header layout v2: hamburger top-left, subtitle under logo ================= */
+.header-left-group {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+.header-brand-subtitle {
+    text-align: center;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--flower-muted);
+    margin-top: 4px;
+}
+
+/* =====================================================
+   Animation & interaction polish
+===================================================== */
+
+/* Fade-in on page load for header content */
+@keyframes bh-fade-in-down {
+    from { opacity: 0; transform: translateY(-8px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes bh-fade-in-up {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes bh-fade-in {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+.blumen-header {
+    animation: bh-fade-in-down 0.5s ease both;
+}
+.header-logo-img {
+    transition: transform 0.35s ease;
+}
+.header-logo-area:hover .header-logo-img {
+    transform: scale(1.04) rotate(-1deg);
+}
+
+/* Animated underline on nav links */
+.header-left-nav a,
+.header-right-nav a {
+    position: relative;
+    transition: color 0.2s ease;
+}
+.header-left-nav a::after,
+.header-right-nav a::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -4px;
+    height: 2px;
+    width: 0;
+    background: var(--flower-green);
+    transition: width 0.25s ease;
+}
+.header-left-nav a:hover::after,
+.header-left-nav a.active::after,
+.header-right-nav a:hover::after {
+    width: 100%;
+}
+
+/* Hamburger icon smoother motion */
+.hamburger-btn span {
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s ease;
+}
+.hamburger-btn:hover span {
+    background: var(--flower-green-dark);
+}
+
+/* Sidebar: smoother easing + slight scale-in on links */
+.app-sidebar {
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.sidebar-nav a {
+    position: relative;
+    transition: background 0.2s ease, padding-left 0.2s ease, color 0.2s ease;
+}
+.sidebar-nav a:hover {
+    padding-left: 26px;
+}
+.sidebar-overlay {
+    transition: opacity 0.35s ease, visibility 0.35s ease;
+}
+
+/* Sidebar items staggered fade-in when opened */
+.app-sidebar.is-open .sidebar-nav a {
+    animation: bh-fade-in-up 0.35s ease both;
+}
+.app-sidebar.is-open .sidebar-nav a:nth-child(1) { animation-delay: 0.05s; }
+.app-sidebar.is-open .sidebar-nav a:nth-child(2) { animation-delay: 0.10s; }
+.app-sidebar.is-open .sidebar-nav a:nth-child(3) { animation-delay: 0.15s; }
+.app-sidebar.is-open .sidebar-nav a:nth-child(4) { animation-delay: 0.20s; }
+.app-sidebar.is-open .sidebar-nav a:nth-child(5) { animation-delay: 0.25s; }
+.app-sidebar.is-open .sidebar-nav a:nth-child(6) { animation-delay: 0.30s; }
+
+/* Homepage hero entrance */
+.about-shop-page h1,
+.about-shop-page .lead,
+.about-shop-page p.text-uppercase {
+    animation: bh-fade-in-up 0.6s ease both;
+}
+.about-shop-page .lead { animation-delay: 0.1s; }
+.about-shop-page .d-flex.gap-2 { animation: bh-fade-in-up 0.6s ease 0.2s both; }
+.about-shop-page .col-lg-5 { animation: bh-fade-in 0.7s ease 0.15s both; }
+
+/* Buttons: gentle press + hover lift */
+.btn {
+    transform: translateY(0);
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.2s ease, border-color 0.2s ease;
+}
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.10);
+}
+.btn:active {
+    transform: translateY(0);
+    box-shadow: none;
+}
+
+/* Cards: staggered entrance on the homepage feature row */
+.row.g-3 .col-md-4 .card {
+    animation: bh-fade-in-up 0.5s ease both;
+}
+.row.g-3 .col-md-4:nth-child(1) .card { animation-delay: 0.05s; }
+.row.g-3 .col-md-4:nth-child(2) .card { animation-delay: 0.15s; }
+.row.g-3 .col-md-4:nth-child(3) .card { animation-delay: 0.25s; }
+
+/* Theme toggle icon spin on click */
+.theme-simple-btn {
+    transition: transform 0.4s ease;
+}
+.theme-simple-btn:active {
+    transform: rotate(180deg);
+}
+
+/* Green strip: subtle shimmer sweep */
+.top-green-strip {
+    position: relative;
+    overflow: hidden;
+}
+.top-green-strip::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -60%;
+    width: 40%;
+    height: 100%;
+    background: linear-gradient(120deg, transparent, rgba(255,255,255,0.35), transparent);
+    animation: bh-shimmer 6s ease-in-out infinite;
+}
+@keyframes bh-shimmer {
+    0%   { left: -60%; }
+    50%  { left: 120%; }
+    100% { left: 120%; }
+}
+
+/* Footer links: arrow-in hover */
+.footer-column a {
+    transition: color 0.2s ease, transform 0.2s ease;
+    display: inline-block;
+}
+.footer-column a:hover {
+    transform: translateX(4px);
+}
+
+/* Respect reduced-motion preference */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+    }
+}
+
+/* =====================================================
+   Homepage v2
+===================================================== */
+.home-eyebrow {
+    color: var(--flower-green-dark);
+    letter-spacing: 2px;
+    font-size: 13px;
+}
+
+.home-hero-visual {
+    background: linear-gradient(135deg, var(--flower-light), transparent 70%);
+    border-radius: 24px;
+    padding: 48px;
+    text-align: center;
+    border: 1px solid var(--flower-line);
+}
+.home-hero-logo {
+    max-width: 320px;
+    width: 100%;
+}
+
+.home-stats-strip {
+    background: var(--flower-green-dark);
+    color: #fff;
+    padding: 36px 0;
+}
+.home-stat-number {
+    font-size: 32px;
+    font-weight: 800;
+}
+.home-stat-label {
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    opacity: 0.85;
+}
+
+.home-feature-card {
+    background: var(--bs-body-bg);
+    border: 1px solid var(--flower-line);
+    border-radius: 16px;
+    padding: 32px 28px;
+    height: 100%;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+.home-feature-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.08);
+    border-color: var(--flower-green);
+}
+.home-feature-icon {
+    font-size: 34px;
+    width: 64px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--flower-light);
+    border-radius: 14px;
+    margin-bottom: 18px;
+}
+
+.home-cta-banner {
+    background: var(--flower-light);
+    border-top: 1px solid var(--flower-line);
+}
+
+[data-bs-theme="dark"] .home-hero-visual {
+    background: linear-gradient(135deg, rgba(154, 203, 49, 0.08), transparent 70%);
+    border-color: #33373c;
+}
+[data-bs-theme="dark"] .home-feature-card {
+    background-color: #1e2125;
+    border-color: #33373c;
+}
+[data-bs-theme="dark"] .home-feature-icon {
+    background: rgba(154, 203, 49, 0.12);
+}
+[data-bs-theme="dark"] .home-cta-banner {
+    background: #1a1c1f;
+    border-color: #2a2d31;
+}
+
+/* ================= Nav bar refinement + circular hamburger ================= */
+.header-left-nav,
+.header-right-nav {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+}
+.header-left-nav a,
+.header-right-nav a {
+    font-size: 15px;
+    color: var(--flower-text);
+    font-weight: 500;
+}
+.header-left-nav a.active {
+    color: var(--flower-green-dark);
+    font-weight: 700;
+}
+
+.hamburger-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid var(--flower-line);
+    background: var(--bs-body-bg);
+    gap: 4px;
+}
+.hamburger-btn span {
+    width: 16px;
+    margin: 0 auto;
+}
+.hamburger-btn:hover {
+    border-color: var(--flower-green);
+    background: var(--flower-light);
+}
+
+.theme-simple-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid var(--flower-line);
+    background: var(--bs-body-bg);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+}
+.theme-simple-btn:hover {
+    border-color: var(--flower-green);
+    background: var(--flower-light);
+}
+
+[data-bs-theme="dark"] .hamburger-btn,
+[data-bs-theme="dark"] .theme-simple-btn {
+    border-color: #33373c;
+}

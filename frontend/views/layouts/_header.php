@@ -11,7 +11,7 @@ $currentRoute = Yii::$app->controller->route;
 
     <!-- Green welcome strip -->
     <div class="top-green-strip">
-        WELCOME TO BLUMENHOF
+        FRESH FLOWERS &middot; SMART MANAGEMENT &middot; COSD PROJECT
     </div>
 
     <!-- Main header -->
@@ -20,8 +20,18 @@ $currentRoute = Yii::$app->controller->route;
 
             <div class="header-grid">
 
-                <!-- Left navigation -->
-                <div>
+                <!-- Left: hamburger + navigation -->
+                <div class="header-left-group">
+                    <?= Html::button(
+                        '<span></span><span></span><span></span>',
+                        [
+                            'id' => 'sidebar-toggle',
+                            'class' => 'hamburger-btn',
+                            'aria-label' => 'Open menu',
+                            'aria-expanded' => 'false',
+                        ]
+                    ) ?>
+
                     <nav class="header-left-nav">
                         <?= Html::a('Home', ['/site/index'], [
                             'class' => $currentRoute === 'site/index' ? 'active' : ''
@@ -50,6 +60,7 @@ $currentRoute = Yii::$app->controller->route;
                         ]),
                         ['/site/index']
                     ) ?>
+                    <div class="header-brand-subtitle">Florist Management Platform</div>
                 </div>
 
                 <!-- Right links -->
@@ -70,16 +81,6 @@ $currentRoute = Yii::$app->controller->route;
                         'class' => 'theme-simple-btn',
                         'aria-label' => 'Switch theme',
                     ]) ?>
-
-                    <?= Html::button(
-                        '<span></span><span></span><span></span>',
-                        [
-                            'id' => 'sidebar-toggle',
-                            'class' => 'hamburger-btn',
-                            'aria-label' => 'Open menu',
-                            'aria-expanded' => 'false',
-                        ]
-                    ) ?>
                 </nav>
 
             </div>
