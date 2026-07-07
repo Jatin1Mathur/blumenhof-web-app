@@ -67,11 +67,18 @@ class SignupForm extends Model
             return false;
         }
 
-        // RBAC decision (Phase 1, Step 8 — ADR): no automatic role assignment on signup.
-        // New accounts intentionally start with zero privileges (least-privilege default).
-        // A manager/admin must explicitly assign a role via auth_assignment before this
-        // user can access any protected module. Do NOT add Yii::$app->authManager->assign()
-        // here without revisiting that decision first.
+        // RBAC decision (updated): every new signup is automatically assigned
+        // the 'guest' role, which deliberately carries zero permissions. This
+        // means a new account can log in and log out immediately, but cannot
+        // access any protected module until a manager/admin upgrades the
+        // account to a real role via auth_assignment. This replaces the
+        // earlier "no role at all" approach with an explicit, auditable
+        // assignment that is visible in auth_assignment from the moment the
+        // account is created.
+        $guestRole = Yii::$app->authManager->getRole('guest');
+        if ($guestRole !== null) {
+            Yii::$app->authManager->assign($guestRole, $user->id);
+        }
 
         return $this->sendEmail($mailer, $user, $supportEmail, $appName);
     }

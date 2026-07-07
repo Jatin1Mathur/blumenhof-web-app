@@ -91,4 +91,27 @@ class RbacController extends Controller
         $this->stdout("RBAC roles & permissions created successfully.\n");
         return ExitCode::OK;
     }
+
+    /**
+     * Adds the 'guest' role only, without touching any existing roles or
+     * permissions. Safe to re-run: does nothing if the role already exists.
+     *
+     * Run with:  php yii rbac/add-guest
+     */
+    public function actionAddGuest()
+    {
+        $auth = Yii::$app->authManager;
+
+        if ($auth->getRole('guest') !== null) {
+            $this->stdout("Guest role already exists, nothing to do.\n");
+            return ExitCode::OK;
+        }
+
+        $guest = $auth->createRole('guest');
+        $guest->description = 'Default role for new signups. No module access.';
+        $auth->add($guest);
+
+        $this->stdout("Guest role created successfully.\n");
+        return ExitCode::OK;
+    }
 }
