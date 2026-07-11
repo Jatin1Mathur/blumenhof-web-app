@@ -20,11 +20,16 @@ class CustomerCompanyController extends Controller
                 'rules' => [
                     [
                         'allow' => true,
-                        'roles' => ['salesEmployee', 'manager', 'owner', 'admin'],
+                        'actions' => ['index', 'view'],
+                        'roles' => ['viewCrm'],
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['create', 'update', 'delete'],
+                        'roles' => ['manageCrm'],
                     ],
                     [
                         'allow' => false,
-                        'roles' => ['?', '@'],
                     ],
                 ],
             ],
@@ -34,7 +39,14 @@ class CustomerCompanyController extends Controller
     public function actionIndex()
     {
         $companies = CustomerCompany::find()->all();
-        return $this->render('index', ['companies' => $companies]);
+        $individuals = \common\models\CustomerContact::find()
+            ->where(['customer_company_id' => null])
+            ->all();
+
+        return $this->render('index', [
+            'companies' => $companies,
+            'individuals' => $individuals,
+        ]);
     }
 
     public function actionView(int $id)

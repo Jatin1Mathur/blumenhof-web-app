@@ -9,10 +9,11 @@ declare(strict_types=1);
 use yii\bootstrap5\ActiveForm;
 use yii\bootstrap5\Html;
 
-$this->title = 'Login to your account';
+$this->title = 'Login to blumenHof';
 $this->params['breadcrumbs'][] = $this->title;
-$this->params['meta_description'] = 'Log in to access your Yii2 application account.';
-$this->params['meta_keywords'] = 'yii, yii2, login, sign in, authentication';
+$this->params['meta_description'] = 'Log in to your blumenHof internal management account.';
+$this->params['meta_keywords'] = 'blumenhof, login, sign in';
+
 $htmlIcon = <<<HTML
 {label}<div class="input-group"><span class="input-group-text" aria-hidden="true">%s</span>{input}</div>{error}{hint}
 HTML;
@@ -27,11 +28,10 @@ $labelOptions = ['class' => 'form-label fw-semibold small'];
                 <div class="d-flex flex-column justify-content-between p-4 p-lg-5 w-100">
                     <div>
                         <?= Html::img(
-                            Yii::getAlias('@web/images/yii3_full_white_for_dark.svg'),
+                            Yii::getAlias('@web/images/blumenhof-logo.svg'),
                             [
-                                'alt' => 'Yii Framework',
-                                'class' => 'mb-4',
-                                'height' => 40,
+                                'alt' => 'Blumenhof',
+                                'class' => 'login-brand-logo mb-4',
                             ],
                         ) ?>
                     </div>
@@ -40,7 +40,7 @@ $labelOptions = ['class' => 'form-label fw-semibold small'];
                             Welcome<br>Back
                         </h2>
                         <p class="opacity-75 mb-0 login-brand-text">
-                            Log in to access your Yii2 application and manage your account.
+                            Log in to manage customers, orders, production, and more.
                         </p>
                     </div>
                 </div>
@@ -53,11 +53,10 @@ $labelOptions = ['class' => 'form-label fw-semibold small'];
                         <!-- Mobile-only logo -->
                         <div class="d-md-none mb-3">
                             <?= Html::img(
-                                Yii::getAlias('@web/images/yii3_full_black_for_light.svg'),
+                                Yii::getAlias('@web/images/blumenhof-logo.svg'),
                                 [
-                                    'alt' => 'Yii Framework',
+                                    'alt' => 'Blumenhof',
                                     'class' => 'login-mobile-logo',
-                                    'height' => 36,
                                 ],
                             ) ?>
                         </div>
@@ -65,7 +64,12 @@ $labelOptions = ['class' => 'form-label fw-semibold small'];
                         <p class="text-body-secondary small">Enter your credentials to continue</p>
                     </div>
 
-                    <?php $form = ActiveForm::begin(['id' => 'login-form']); ?>
+                    <?php $form = ActiveForm::begin([
+                        'id' => 'login-form',
+                        'validateOnChange' => false,
+                        'validateOnBlur' => false,
+                        'validateOnSubmit' => true,
+                    ]); ?>
 
                     <div class="mb-3">
                         <?= $form->field($model, 'username', [

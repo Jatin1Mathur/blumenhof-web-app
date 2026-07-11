@@ -17,7 +17,7 @@ final class SignupCest
 
     public function signupWithEmptyFields(FunctionalTester $I): void
     {
-        $I->see('Create a new account', 'h1');
+        $I->see('Create a blumenHof account', 'h1');
         $I->see('Fill out the fields below to get started');
         $I->submitForm($this->formId, []);
         $I->seeValidationError('Username cannot be blank.');

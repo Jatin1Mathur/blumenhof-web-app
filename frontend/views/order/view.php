@@ -48,6 +48,13 @@ $productionOrder = ProductionOrder::findOne(['order_id' => $model->id]);
     ],
 ]) ?>
 
+<div class="mb-3">
+    <?= Html::a('🧾 Generate Invoice', ['invoice', 'id' => $model->id], [
+        'class' => 'btn btn-outline-secondary',
+        'target' => '_blank',
+    ]) ?>
+</div>
+
 <h3>Change Status</h3>
 <?php $allowedStatuses = $model->getAllowedNextStatuses(); ?>
 <?php if (empty($allowedStatuses)): ?>

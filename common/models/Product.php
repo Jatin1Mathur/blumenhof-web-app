@@ -87,6 +87,7 @@ class Product extends ActiveRecord
 
         if ($this->imageFile->saveAs($filePath)) {
             $this->image_path = 'uploads/products/' . $fileName;
+            $this->imageFile = null;
             return true;
         }
 

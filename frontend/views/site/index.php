@@ -60,22 +60,30 @@ $this->params['meta_keywords'] = 'florist, blumenhof, management, crm, orders, p
     <!-- Stats strip -->
     <div class="home-stats-strip">
         <div class="container-fluid px-4">
-            <div class="row text-center g-4">
+            <div class="row g-4">
                 <div class="col-6 col-md-3">
-                    <div class="home-stat-number">5</div>
-                    <div class="home-stat-label">Core Modules</div>
+                    <div class="home-stat-card">
+                        <div class="home-stat-number">5</div>
+                        <div class="home-stat-label">Core Modules</div>
+                    </div>
                 </div>
                 <div class="col-6 col-md-3">
-                    <div class="home-stat-number">6</div>
-                    <div class="home-stat-label">Order Stages</div>
+                    <div class="home-stat-card">
+                        <div class="home-stat-number">6</div>
+                        <div class="home-stat-label">Order Stages</div>
+                    </div>
                 </div>
                 <div class="col-6 col-md-3">
-                    <div class="home-stat-number">1</div>
-                    <div class="home-stat-label">Unified Dashboard</div>
+                    <div class="home-stat-card">
+                        <div class="home-stat-number">1</div>
+                        <div class="home-stat-label">Unified Dashboard</div>
+                    </div>
                 </div>
                 <div class="col-6 col-md-3">
-                    <div class="home-stat-number">24/7</div>
-                    <div class="home-stat-label">Always Available</div>
+                    <div class="home-stat-card">
+                        <div class="home-stat-number">24/7</div>
+                        <div class="home-stat-label">Always Available</div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -89,31 +97,37 @@ $this->params['meta_keywords'] = 'florist, blumenhof, management, crm, orders, p
         </div>
         <div class="row g-4">
             <div class="col-md-4">
-                <div class="home-feature-card">
-                    <div class="home-feature-icon">👥</div>
-                    <h3 class="h5 fw-bold mb-2">Customers</h3>
-                    <p class="text-body-secondary mb-0">
-                        Keep track of companies and contacts, organized by customer category.
-                    </p>
-                </div>
+                <?= Html::a('
+                    <div class="home-feature-card">
+                        <div class="home-feature-icon">💐</div>
+                        <h3 class="h5 fw-bold mb-2">Catalog &amp; Stock</h3>
+                        <p class="text-body-secondary mb-0">
+                            Manage products and categories, and get warned before anything runs low.
+                        </p>
+                    </div>
+                ', ['/product/index'], ['class' => 'text-decoration-none text-reset d-block']) ?>
             </div>
             <div class="col-md-4">
-                <div class="home-feature-card">
-                    <div class="home-feature-icon">💐</div>
-                    <h3 class="h5 fw-bold mb-2">Catalog &amp; Stock</h3>
-                    <p class="text-body-secondary mb-0">
-                        Manage products and categories, and get warned before anything runs low.
-                    </p>
-                </div>
+                <?= Html::a('
+                    <div class="home-feature-card">
+                        <div class="home-feature-icon">🧾</div>
+                        <h3 class="h5 fw-bold mb-2">Orders</h3>
+                        <p class="text-body-secondary mb-0">
+                            Track every order from draft to delivery, all in one place.
+                        </p>
+                    </div>
+                ', ['/order/index'], ['class' => 'text-decoration-none text-reset d-block']) ?>
             </div>
             <div class="col-md-4">
-                <div class="home-feature-card">
-                    <div class="home-feature-icon">🧾</div>
-                    <h3 class="h5 fw-bold mb-2">Orders &amp; Production</h3>
-                    <p class="text-body-secondary mb-0">
-                        Track every order from draft to delivery, and plan production with ease.
-                    </p>
-                </div>
+                <?= Html::a('
+                    <div class="home-feature-card">
+                        <div class="home-feature-icon">🏭</div>
+                        <h3 class="h5 fw-bold mb-2">Production</h3>
+                        <p class="text-body-secondary mb-0">
+                            Plan production tasks, from stock decision to completion.
+                        </p>
+                    </div>
+                ', ['/production-order/index'], ['class' => 'text-decoration-none text-reset d-block']) ?>
             </div>
         </div>
     </div>

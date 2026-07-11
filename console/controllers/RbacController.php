@@ -114,4 +114,55 @@ class RbacController extends Controller
         $this->stdout("Guest role created successfully.\n");
         return ExitCode::OK;
     }
+
+    /**
+     * Recreates the protected blumenhofadmin account if it's missing, and
+     * (re)assigns the admin role to it. Safe to re-run at any time: if the
+     * account already exists, only the role assignment is refreshed.
+     *
+     * Useful because the test suite and the real app currently share one
+     * database, so running the automated tests clears the user table and
+     * removes this account as a side effect.
+     *
+     * Run with:  php yii rbac/seed-admin
+     */
+    public function actionSeedAdmin()
+    {
+        $auth = Yii::$app->authManager;
+        $username = 'blumenhofadmin';
+        $email = 'hofsemesterwork@gmail.com';
+        $password = 'BlumenGroup4';
+
+        $user = \common\models\User::findOne(['username' => $username]);
+
+        if ($user === null) {
+            $user = new \common\models\User();
+            $user->username = $username;
+            $user->email = $email;
+            $user->setPassword($password);
+            $user->generateAuthKey();
+            $user->status = \common\models\User::STATUS_ACTIVE;
+
+            if (!$user->save()) {
+                $this->stderr("Failed to create admin user: " . json_encode($user->getErrors()) . "\n");
+                return ExitCode::UNSPECIFIED_ERROR;
+            }
+
+            $this->stdout("Created {$username} (id={$user->id}).\n");
+        } else {
+            $this->stdout("{$username} already exists (id={$user->id}), refreshing role only.\n");
+        }
+
+        $adminRole = $auth->getRole('admin');
+        if ($adminRole === null) {
+            $this->stderr("The 'admin' role does not exist yet. Run 'php yii rbac/init' first.\n");
+            return ExitCode::UNSPECIFIED_ERROR;
+        }
+
+        $auth->revokeAll($user->id);
+        $auth->assign($adminRole, $user->id);
+
+        $this->stdout("Admin role assigned to {$username}.\n");
+        return ExitCode::OK;
+    }
 }

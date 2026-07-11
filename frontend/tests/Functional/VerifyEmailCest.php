@@ -52,7 +52,7 @@ final class VerifyEmailCest
     {
         $I->amOnRoute('site/verify-email', ['token' => '4ch0qbfhvWwkcuWqjN8SWRq72SOw1KYT_1548675330']);
         $I->canSee('Your email has been confirmed!');
-        $I->canSee('Everything your shop needs, in one clean system.', 'h1');
+        $I->canSee('Everything your shop needs', 'h1');
         $I->dontSeeLink('Logout (test.test)');
         $I->seeRecord(
             User::class,

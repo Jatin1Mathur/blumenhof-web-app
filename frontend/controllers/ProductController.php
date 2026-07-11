@@ -22,11 +22,16 @@ class ProductController extends Controller
                 'rules' => [
                     [
                         'allow' => true,
-                        'roles' => ['inventoryEmployee', 'salesEmployee', 'manager', 'owner', 'admin'],
+                        'actions' => ['index', 'view'],
+                        'roles' => ['viewCatalog'],
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['create', 'update', 'delete'],
+                        'roles' => ['manageCatalog'],
                     ],
                     [
                         'allow' => false,
-                        'roles' => ['?', '@'],
                     ],
                 ],
             ],
@@ -51,7 +56,7 @@ class ProductController extends Controller
         if ($model->load(Yii::$app->request->post())) {
             $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
 
-            if ($model->validate() && $model->uploadImage() && $model->save()) {
+            if ($model->validate() && $model->uploadImage() && $model->save(false)) {
                 return $this->redirect(['index']);
             }
         }
@@ -66,7 +71,7 @@ class ProductController extends Controller
         if ($model->load(Yii::$app->request->post())) {
             $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
 
-            if ($model->validate() && $model->uploadImage() && $model->save()) {
+            if ($model->validate() && $model->uploadImage() && $model->save(false)) {
                 return $this->redirect(['index']);
             }
         }

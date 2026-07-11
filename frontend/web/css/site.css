@@ -415,13 +415,6 @@ body {
 .footer-column a:hover {
     color: var(--flower-green-dark);
 }
-
-.footer-social {
-    display: flex;
-    gap: 32px;
-}
-
-.footer-social a {
     font-size: 24px;
     color: var(--bs-secondary-color);
 }
@@ -1155,4 +1148,697 @@ body, .card, .border, .btn, .shop-style-footer {
 [data-bs-theme="dark"] .hamburger-btn,
 [data-bs-theme="dark"] .theme-simple-btn {
     border-color: #33373c;
+}
+
+/* ================= Login page ================= */
+.site-login {
+    min-height: calc(100vh - 400px);
+}
+.login-split-card {
+    max-width: 900px;
+    width: 100%;
+    border-radius: 20px !important;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.08);
+}
+.login-brand-panel {
+    background: linear-gradient(160deg, var(--flower-green-dark), var(--flower-green));
+}
+.login-brand-logo {
+    max-width: 140px;
+    filter: brightness(0) invert(1);
+}
+.login-brand-title {
+    font-size: 32px;
+}
+.login-brand-text {
+    font-size: 15px;
+    max-width: 260px;
+}
+.login-mobile-logo {
+    max-width: 120px;
+}
+.login-btn {
+    background-color: var(--flower-green-dark);
+    border-color: var(--flower-green-dark);
+}
+.login-btn:hover {
+    background-color: var(--flower-green);
+    border-color: var(--flower-green);
+}
+
+[data-bs-theme="dark"] .login-split-card {
+    background-color: #1e2125;
+}
+
+/* ================= Login page polish v2 ================= */
+.site-login {
+    background: radial-gradient(circle at top right, rgba(154, 203, 49, 0.06), transparent 60%);
+}
+.login-split-card {
+    border-radius: 24px !important;
+}
+.login-brand-panel {
+    background: linear-gradient(160deg, var(--flower-green-dark) 0%, #7fa832 60%, var(--flower-green) 100%);
+    position: relative;
+    overflow: hidden;
+}
+.login-brand-panel::before {
+    content: '';
+    position: absolute;
+    width: 280px;
+    height: 280px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.06);
+    top: -100px;
+    right: -100px;
+}
+.login-brand-panel::after {
+    content: '';
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.05);
+    bottom: -60px;
+    left: -60px;
+}
+.login-brand-logo,
+.login-brand-title,
+.login-brand-text {
+    position: relative;
+    z-index: 1;
+}
+
+[data-bs-theme="dark"] .site-login {
+    background: radial-gradient(circle at top right, rgba(154, 203, 49, 0.04), transparent 60%);
+}
+
+/* ================= Header & footer polish v3 ================= */
+.main-shop-header {
+    min-height: 170px;
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.04);
+    position: relative;
+    z-index: 10;
+}
+.top-green-strip {
+    letter-spacing: 3px;
+    background: linear-gradient(90deg, var(--flower-green-dark), var(--flower-green));
+}
+
+.shop-style-footer {
+    background: var(--flower-light);
+    border-top: 3px solid var(--flower-green);
+}
+.footer-main-area {
+    padding: 56px 0 32px;
+}
+.footer-logo-space {
+    padding-right: 24px;
+}
+.footer-logo-img {
+    max-height: 64px;
+    margin-bottom: 8px;
+}
+.footer-heading {
+    position: relative;
+    padding-bottom: 8px;
+}
+.footer-heading::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 28px;
+    height: 2px;
+    background: var(--flower-green);
+}
+.footer-bottom {
+    padding-top: 24px;
+    margin-top: 24px;
+    border-top: 1px solid var(--flower-line);
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--flower-muted);
+    letter-spacing: 0.5px;
+}
+
+[data-bs-theme="dark"] .shop-style-footer {
+    background: #17191c;
+    border-top-color: var(--flower-green);
+}
+[data-bs-theme="dark"] .main-shop-header {
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.3);
+}
+
+/* ================= Footer simplified to match reference ================= */
+.shop-style-footer {
+    background: var(--bs-body-bg) !important;
+    border-top: 1px solid var(--flower-line) !important;
+}
+.footer-heading::after {
+    display: none;
+}
+[data-bs-theme="dark"] .shop-style-footer {
+    background: var(--bs-body-bg) !important;
+    border-top-color: #2a2d31 !important;
+}
+
+/* ================= Footer simplified to match reference ================= */
+.shop-style-footer {
+    background: var(--bs-body-bg) !important;
+    border-top: 1px solid var(--flower-line) !important;
+}
+.footer-heading::after {
+    display: none;
+}
+[data-bs-theme="dark"] .shop-style-footer {
+    background: var(--bs-body-bg) !important;
+    border-top-color: #2a2d31 !important;
+}
+
+/* ================= Header simplified to match reference ================= */
+.main-shop-header {
+    box-shadow: none !important;
+    min-height: 190px;
+}
+.top-green-strip {
+    background: var(--flower-green) !important;
+    letter-spacing: 5px;
+}
+.top-green-strip::after {
+    display: none;
+}
+
+/* ================= Header logo size boost ================= */
+.header-logo-img {
+    max-height: 105px;
+}
+
+/* =====================================================
+   Refined stat cards + feature cards — adopting the
+   layered-shadow / gradient-hover design language
+===================================================== */
+.home-feature-card {
+    border-radius: 22px !important;
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.4),
+        0 10px 26px rgba(0, 0, 0, 0.06);
+}
+.home-feature-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--flower-green) !important;
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.5),
+        0 18px 36px rgba(0, 0, 0, 0.10);
+}
+
+[data-bs-theme="dark"] .home-feature-card {
+    background: linear-gradient(145deg, #1b2a1c, #223421) !important;
+    border-color: rgba(154, 203, 49, 0.22) !important;
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.05),
+        0 14px 30px rgba(0, 0, 0, 0.22);
+}
+[data-bs-theme="dark"] .home-feature-card:hover {
+    border-color: rgba(154, 203, 49, 0.55) !important;
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.07),
+        0 20px 42px rgba(0, 0, 0, 0.32);
+}
+[data-bs-theme="dark"] .home-feature-icon {
+    background: rgba(154, 203, 49, 0.15) !important;
+}
+
+/* Stats strip: bolder number, refined label weight */
+.home-stat-number {
+    font-size: 40px;
+    font-weight: 900;
+    letter-spacing: -1px;
+}
+.home-stat-label {
+    font-weight: 700;
+    letter-spacing: 1.2px;
+}
+
+/* =====================================================
+   Site-wide design system — extracted tokens applied
+   consistently to cards, buttons, forms, tables
+===================================================== */
+:root {
+    --bh-radius: 22px;
+    --bh-dark-card-grad: linear-gradient(145deg, #1b2a1c, #223421);
+    --bh-dark-border: rgba(154, 203, 49, 0.22);
+    --bh-dark-border-hover: rgba(154, 203, 49, 0.55);
+    --bh-dark-text: #d8e5d5;
+}
+
+/* Cards, everywhere */
+.card,
+.home-feature-card,
+.about-card,
+.about-feature,
+.login-split-card {
+    border-radius: var(--bh-radius) !important;
+}
+
+/* Buttons: consistent radius + weight */
+.btn {
+    border-radius: 14px !important;
+    font-weight: 700 !important;
+}
+
+/* Form inputs: consistent radius */
+.form-control,
+.form-select {
+    border-radius: 12px !important;
+}
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--flower-green) !important;
+    box-shadow: 0 0 0 0.2rem rgba(154, 203, 49, 0.15) !important;
+}
+
+/* Tables: rounded container, refined header */
+.table-responsive,
+table.table {
+    border-radius: 14px;
+    overflow: hidden;
+}
+table.table thead th {
+    background: var(--flower-light);
+}
+
+/* ============ Dark mode — applied consistently ============ */
+[data-bs-theme="dark"] .card,
+[data-bs-theme="dark"] .home-feature-card,
+[data-bs-theme="dark"] .about-card,
+[data-bs-theme="dark"] .about-feature,
+[data-bs-theme="dark"] .login-split-card,
+[data-bs-theme="dark"] .home-hero-visual {
+    background: var(--bh-dark-card-grad) !important;
+    border-color: var(--bh-dark-border) !important;
+}
+[data-bs-theme="dark"] .card:hover,
+[data-bs-theme="dark"] .home-feature-card:hover,
+[data-bs-theme="dark"] .about-card:hover,
+[data-bs-theme="dark"] .about-feature:hover {
+    border-color: var(--bh-dark-border-hover) !important;
+}
+[data-bs-theme="dark"] .card .card-body p,
+[data-bs-theme="dark"] .text-body-secondary,
+[data-bs-theme="dark"] .home-feature-card p {
+    color: var(--bh-dark-text) !important;
+}
+[data-bs-theme="dark"] .form-control,
+[data-bs-theme="dark"] .form-select {
+    background-color: #1e2125;
+    border-color: #33373c;
+    color: #e8e8e8;
+}
+[data-bs-theme="dark"] table.table thead th {
+    background: #1a1c1f;
+}
+[data-bs-theme="dark"] .table-responsive,
+[data-bs-theme="dark"] table.table {
+    border: 1px solid #2a2d31;
+}
+
+/* =====================================================
+   Header & footer — consistent with the site-wide
+   design system (radius, dark-mode tokens)
+===================================================== */
+.hamburger-btn,
+.theme-simple-btn {
+    border-radius: 50% !important;
+}
+
+[data-bs-theme="dark"] .main-shop-header {
+    background: #16181b;
+}
+[data-bs-theme="dark"] .hamburger-btn,
+[data-bs-theme="dark"] .theme-simple-btn {
+    background: #1e2125;
+    border-color: var(--bh-dark-border);
+}
+[data-bs-theme="dark"] .hamburger-btn:hover,
+[data-bs-theme="dark"] .theme-simple-btn:hover {
+    border-color: var(--bh-dark-border-hover);
+}
+
+[data-bs-theme="dark"] .shop-style-footer {
+    background: #16181b !important;
+}
+[data-bs-theme="dark"] .footer-column a {
+    color: var(--bh-dark-text);
+}
+[data-bs-theme="dark"] .footer-social a {
+    border-color: var(--bh-dark-border);
+    color: var(--bh-dark-text);
+}
+[data-bs-theme="dark"] .footer-social a:hover {
+    border-color: var(--flower-green);
+    background: var(--flower-green);
+    color: #fff;
+}
+[data-bs-theme="dark"] .footer-bottom {
+    border-top-color: #2a2d31;
+}
+
+/* =====================================================
+   Home stat cards — premium layered treatment
+   (adapted from the reference design dump)
+===================================================== */
+.home-stats-strip {
+    background: transparent !important;
+    padding: 40px 0;
+}
+.home-stat-card {
+    background: #ffffff;
+    border: 1px solid #dfe6d8;
+    border-radius: var(--bh-radius);
+    padding: 24px 20px;
+    min-height: 120px;
+    text-align: center;
+    box-shadow: 0 12px 28px rgba(31, 37, 34, 0.06);
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+.home-stat-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--flower-green);
+    box-shadow: 0 18px 36px rgba(31, 37, 34, 0.10);
+}
+.home-stat-number {
+    color: var(--flower-green-dark);
+    font-size: 40px;
+    font-weight: 900;
+    letter-spacing: -1px;
+    line-height: 1;
+    margin-bottom: 10px;
+}
+.home-stat-label {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: var(--flower-muted);
+}
+
+[data-bs-theme="dark"] .home-stat-card {
+    background: var(--bh-dark-card-grad);
+    border-color: var(--bh-dark-border);
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.05),
+        0 14px 30px rgba(0, 0, 0, 0.22);
+}
+[data-bs-theme="dark"] .home-stat-card:hover {
+    border-color: var(--bh-dark-border-hover);
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.07),
+        0 20px 42px rgba(0, 0, 0, 0.32);
+}
+[data-bs-theme="dark"] .home-stat-number {
+    color: var(--flower-green);
+}
+[data-bs-theme="dark"] .home-stat-label {
+    color: var(--bh-dark-text);
+}
+
+/* ================= Footer social icons (real SVGs) ================= */
+.footer-social a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+.footer-social a svg {
+    display: block;
+}
+
+/* ================= Signup page — slight variation from login ================= */
+.site-signup .login-brand-panel {
+    background: linear-gradient(160deg, #7fa832 0%, var(--flower-green) 60%, var(--flower-green-dark) 100%);
+}
+.site-signup .login-split-card {
+    max-width: 950px;
+}
+
+/* =====================================================
+   Internal module pages — shared header/table styling
+===================================================== */
+.module-page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 28px;
+}
+.module-page-header h1 {
+    margin-bottom: 4px;
+}
+
+.module-table-wrap {
+    background: var(--bs-body-bg);
+    border: 1px solid var(--flower-line);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03);
+}
+.module-table-wrap table {
+    margin-bottom: 0;
+}
+.module-table-wrap thead th {
+    background: var(--flower-light);
+    border-bottom: none;
+    font-size: 12px;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+    color: var(--flower-muted);
+    padding: 14px 16px;
+}
+.module-table-wrap tbody td {
+    padding: 14px 16px;
+    border-color: var(--flower-line);
+}
+.module-table-wrap tbody tr:hover {
+    background: var(--flower-light);
+}
+
+.module-status-badge {
+    font-weight: 600;
+    padding: 5px 10px;
+    border-radius: 8px;
+}
+
+[data-bs-theme="dark"] .module-table-wrap {
+    background: #1e2125;
+    border-color: #33373c;
+}
+[data-bs-theme="dark"] .module-table-wrap thead th {
+    background: #17191c;
+    color: #9aa0a6;
+}
+[data-bs-theme="dark"] .module-table-wrap tbody td {
+    border-color: #2a2d31;
+    color: #e8e8e8;
+}
+[data-bs-theme="dark"] .module-table-wrap tbody tr:hover {
+    background: #24272b;
+}
+
+/* ================= Low stock row highlight ================= */
+.module-row-low-stock {
+    background: rgba(220, 53, 69, 0.06) !important;
+}
+[data-bs-theme="dark"] .module-row-low-stock {
+    background: rgba(220, 53, 69, 0.12) !important;
+}
+
+/* ================= Category badge (CRM) ================= */
+.module-category-badge {
+    border: 1px solid var(--flower-line);
+    color: var(--flower-green-dark);
+    background: var(--flower-light) !important;
+}
+[data-bs-theme="dark"] .module-category-badge {
+    border-color: #33373c;
+    background: #1e2125 !important;
+    color: var(--flower-green);
+}
+
+/* =====================================================
+   Dashboard v2 — 4-card grid with soft shadows and
+   staggered fade-in-up entrance
+===================================================== */
+.dash-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+    margin-top: 24px;
+}
+@media (max-width: 900px) {
+    .dash-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.dash-card {
+    background: #fff;
+    border-radius: 20px;
+    padding: 24px;
+    box-shadow: 0 1px 20px rgba(0, 0, 0, 0.06);
+}
+.dash-card h3 {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 16px;
+}
+
+@keyframes dash-fade-in-up {
+    from { opacity: 0; transform: translateY(40px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+.dash-appear {
+    opacity: 0;
+    animation: dash-fade-in-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    animation-delay: var(--dash-delay, 0s);
+}
+
+[data-bs-theme="dark"] .dash-card {
+    background: #1e2125;
+    box-shadow: 0 1px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* ================= Dashboard "More Insights" toggle section ================= */
+.dash-more-section {
+    margin-top: 40px;
+}
+.dash-more-heading {
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: var(--flower-muted);
+    margin-bottom: 14px;
+}
+.dash-more-buttons {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+.dash-toggle-btn {
+    border-radius: 999px !important;
+}
+.dash-toggle-btn.active {
+    background: var(--flower-green) !important;
+    border-color: var(--flower-green) !important;
+    color: #fff !important;
+}
+.dash-more-panel {
+    margin-bottom: 20px;
+    animation: dash-fade-in-up 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ================= Dashboard polish v2 ================= */
+.dash-card {
+    border: 1px solid var(--flower-line);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.dash-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.10);
+}
+.dash-card h3 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--flower-green-dark);
+}
+.dash-card canvas {
+    max-height: 260px;
+}
+
+[data-bs-theme="dark"] .dash-card {
+    border-color: #33373c;
+}
+[data-bs-theme="dark"] .dash-card:hover {
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.35);
+    border-color: var(--flower-green);
+}
+[data-bs-theme="dark"] .dash-card h3 {
+    color: var(--flower-green);
+}
+
+.dash-more-panel.dash-card:hover {
+    transform: none;
+}
+
+/* ================= Dashboard KPI row + page polish ================= */
+.dash-kpi-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+    margin-bottom: 32px;
+}
+.dash-kpi {
+    background: linear-gradient(135deg, var(--flower-green-dark), var(--flower-green));
+    color: #fff;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 8px 20px rgba(154, 203, 49, 0.25);
+}
+.dash-kpi-value {
+    font-size: 30px;
+    font-weight: 800;
+    line-height: 1;
+    margin-bottom: 6px;
+}
+.dash-kpi-label {
+    font-size: 12px;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+    opacity: 0.85;
+}
+
+[data-bs-theme="dark"] .dash-kpi {
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+}
+
+/* ================= Table row entrance animation ================= */
+@keyframes row-fade-in {
+    from { opacity: 0; transform: translateX(-8px); }
+    to   { opacity: 1; transform: translateX(0); }
+}
+.module-table-wrap tbody tr {
+    animation: row-fade-in 0.35s ease both;
+}
+.module-table-wrap tbody tr:nth-child(1) { animation-delay: 0.03s; }
+.module-table-wrap tbody tr:nth-child(2) { animation-delay: 0.06s; }
+.module-table-wrap tbody tr:nth-child(3) { animation-delay: 0.09s; }
+.module-table-wrap tbody tr:nth-child(4) { animation-delay: 0.12s; }
+.module-table-wrap tbody tr:nth-child(5) { animation-delay: 0.15s; }
+.module-table-wrap tbody tr:nth-child(6) { animation-delay: 0.18s; }
+.module-table-wrap tbody tr:nth-child(7) { animation-delay: 0.21s; }
+.module-table-wrap tbody tr:nth-child(8) { animation-delay: 0.24s; }
+.module-table-wrap tbody tr:nth-child(n+9) { animation-delay: 0.27s; }
+
+/* ================= Universal clickable affordance ================= */
+a, button, .btn, [role="button"], .dash-toggle-btn, .footer-social a,
+.header-left-nav a, .header-right-nav a, .sidebar-nav a, .hamburger-btn,
+.theme-simple-btn, .sidebar-close-btn {
+    cursor: pointer;
+}
+a:not(.btn):hover {
+    opacity: 0.85;
+}
+button:disabled, .btn:disabled, .btn.disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+/* Make sure table action links/buttons always look interactive */
+.module-table-wrap a, .module-table-wrap button {
+    cursor: pointer;
 }

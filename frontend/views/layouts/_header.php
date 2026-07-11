@@ -45,9 +45,6 @@ $currentRoute = Yii::$app->controller->route;
                             'class' => $currentRoute === 'site/contact' ? 'active' : ''
                         ]) ?>
 
-                        <?= Html::a('Impressum', ['/site/impressum'], [
-                            'class' => $currentRoute === 'site/impressum' ? 'active' : ''
-                        ]) ?>
                     </nav>
                 </div>
 

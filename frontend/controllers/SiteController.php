@@ -180,6 +180,16 @@ class SiteController extends Controller
         return $this->render('impressum');
     }
 
+    public function actionPrivacy(): string
+    {
+        return $this->render('privacy');
+    }
+
+    public function actionTerms(): string
+    {
+        return $this->render('terms');
+    }
+
     private function renderInternalPage(string $moduleName, string $routeId, string $viewPermission, string $managePermission): string
     {
         return $this->render('internal-page', [

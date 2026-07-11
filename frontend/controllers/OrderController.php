@@ -6,6 +6,8 @@ namespace frontend\controllers;
 
 use common\models\Order;
 use common\models\OrderItem;
+use common\models\CustomerContact;
+use common\models\CustomerCompany;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -21,11 +23,16 @@ class OrderController extends Controller
                 'rules' => [
                     [
                         'allow' => true,
-                        'roles' => ['salesEmployee', 'financialEmployee', 'manager', 'owner', 'admin'],
+                        'actions' => ['index', 'view', 'invoice'],
+                        'roles' => ['viewOrders'],
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['create', 'update', 'delete', 'change-status'],
+                        'roles' => ['manageOrders'],
                     ],
                     [
                         'allow' => false,
-                        'roles' => ['?', '@'],
                     ],
                 ],
             ],
@@ -43,15 +50,40 @@ class OrderController extends Controller
         return $this->render('view', ['model' => $this->findModel($id)]);
     }
 
+    /**
+     * Renders a printable invoice for a single order. Uses its own minimal
+     * layout (no header/sidebar/footer) so the browser's print/PDF output
+     * is clean.
+     */
+    public function actionInvoice(int $id)
+    {
+        $this->layout = 'invoice';
+        return $this->render('invoice', ['model' => $this->findModel($id)]);
+    }
+
     public function actionCreate()
     {
         $model = new Order();
         $model->user_id = Yii::$app->user->id;
 
         $itemModels = [new OrderItem()];
+        $isNewCompanyFirstOrder = false;
 
         if ($model->load(Yii::$app->request->post())) {
             $itemModels = $this->createOrderItems(Yii::$app->request->post('OrderItem', []));
+
+            $newCompanyData = Yii::$app->request->post('NewCompany', []);
+            $newCompany = $this->createNewCompanyIfProvided($newCompanyData);
+            if ($newCompany !== null) {
+                $model->customer_company_id = $newCompany->id;
+                $isNewCompanyFirstOrder = true;
+            }
+
+            $newContactData = Yii::$app->request->post('NewContact', []);
+            $newContact = $this->createNewContactIfProvided($newContactData);
+            if ($newContact !== null) {
+                $model->customer_contact_id = $newContact->id;
+            }
 
             if ($model->validate() && $this->validateItems($itemModels)) {
                 $transaction = Yii::$app->db->beginTransaction();
@@ -62,6 +94,14 @@ class OrderController extends Controller
                             $itemModel->save(false);
                         }
                         $transaction->commit();
+
+                        if ($isNewCompanyFirstOrder) {
+                            Yii::$app->session->setFlash(
+                                'success',
+                                "Order created — this is {$newCompany->name}'s first order in the system."
+                            );
+                        }
+
                         return $this->redirect(['view', 'id' => $model->id]);
                     }
                     $transaction->rollBack();
@@ -97,6 +137,14 @@ class OrderController extends Controller
                             $itemModel->save(false);
                         }
                         $transaction->commit();
+
+                        if ($isNewCompanyFirstOrder) {
+                            Yii::$app->session->setFlash(
+                                'success',
+                                "Order created — this is {$newCompany->name}'s first order in the system."
+                            );
+                        }
+
                         return $this->redirect(['view', 'id' => $model->id]);
                     }
                     $transaction->rollBack();
@@ -142,6 +190,63 @@ class OrderController extends Controller
             $items[] = $item;
         }
         return $items ?: [new OrderItem()];
+    }
+
+    /**
+     * If the "New Individual Customer" form fields were filled in, creates
+     * a standalone CustomerContact (no company) from them. Returns null if
+     * no first/last name was provided, meaning the order should proceed
+     * using whatever existing company/contact was selected instead.
+     */
+    /**
+     * If the "New Company" form fields were filled in, creates a
+     * CustomerCompany record from them. Returns null if no name was
+     * provided, meaning the order should proceed using whatever existing
+     * company was selected from the dropdown instead.
+     */
+    protected function createNewCompanyIfProvided(array $data): ?CustomerCompany
+    {
+        $name = trim($data['name'] ?? '');
+
+        if ($name === '') {
+            return null;
+        }
+
+        $company = new CustomerCompany();
+        $company->name = $name;
+        $company->city = trim($data['city'] ?? '') ?: null;
+        $company->country = trim($data['country'] ?? '') ?: null;
+
+        if (!$company->save()) {
+            Yii::error('Failed to create new company: ' . json_encode($company->getErrors()), __METHOD__);
+            return null;
+        }
+
+        return $company;
+    }
+
+    protected function createNewContactIfProvided(array $data): ?CustomerContact
+    {
+        $firstName = trim($data['first_name'] ?? '');
+        $lastName = trim($data['last_name'] ?? '');
+
+        if ($firstName === '' && $lastName === '') {
+            return null;
+        }
+
+        $contact = new CustomerContact();
+        $contact->first_name = $firstName;
+        $contact->last_name = $lastName;
+        $contact->email = trim($data['email'] ?? '') ?: null;
+        $contact->phone = trim($data['phone'] ?? '') ?: null;
+        $contact->customer_company_id = null;
+
+        if (!$contact->save()) {
+            Yii::error('Failed to create new contact: ' . json_encode($contact->getErrors()), __METHOD__);
+            return null;
+        }
+
+        return $contact;
     }
 
     protected function validateItems(array $itemModels): bool

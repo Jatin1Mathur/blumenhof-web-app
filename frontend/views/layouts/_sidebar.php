@@ -7,12 +7,14 @@ use yii\helpers\Html;
 $user = Yii::$app->user;
 $isGuest = $user->isGuest;
 
-$canCrm = !$isGuest && ($user->can('salesEmployee') || $user->can('manager') || $user->can('owner') || $user->can('admin'));
-$canCatalog = !$isGuest && ($user->can('salesEmployee') || $user->can('inventoryEmployee') || $user->can('manager') || $user->can('owner') || $user->can('admin'));
-$canStock = !$isGuest && ($user->can('inventoryEmployee') || $user->can('manager') || $user->can('owner') || $user->can('admin'));
-$canOrders = !$isGuest && ($user->can('salesEmployee') || $user->can('financialEmployee') || $user->can('manager') || $user->can('owner') || $user->can('admin'));
-$canProduction = !$isGuest && ($user->can('inventoryEmployee') || $user->can('manager') || $user->can('owner') || $user->can('admin'));
-$canDashboard = !$isGuest && ($user->can('manager') || $user->can('owner') || $user->can('admin'));
+// Each check uses the real RBAC permission, matching the access matrix
+// exactly. "view*" already covers anyone with "manage*" too, since manage
+// is defined as a parent of view in RbacController.php.
+$canCrm = !$isGuest && $user->can('viewCrm');
+$canCatalog = !$isGuest && $user->can('viewCatalog');
+$canOrders = !$isGuest && $user->can('viewOrders');
+$canProduction = !$isGuest && $user->can('viewProduction');
+$canDashboard = !$isGuest && $user->can('viewDashboard');
 $canManageUsers = !$isGuest && $user->can('manageUsers');
 ?>
 
@@ -27,7 +29,7 @@ $canManageUsers = !$isGuest && $user->can('manageUsers');
         <button id="sidebar-close" class="sidebar-close-btn" aria-label="Close menu">&times;</button>
     </div>
 
-    <?php if ($canDashboard || $canCrm || $canCatalog || $canStock || $canOrders || $canProduction): ?>
+    <?php if ($canDashboard || $canCrm || $canCatalog || $canOrders || $canProduction): ?>
         <div class="sidebar-section-label">Shop Management</div>
         <nav class="sidebar-nav">
             <?php if ($canCrm): ?>
@@ -42,7 +44,7 @@ $canManageUsers = !$isGuest && $user->can('manageUsers');
             <?php if ($canProduction): ?>
                 <?= Html::a('🏭 Production', ['/production-order/index']) ?>
             <?php endif; ?>
-            <?php if ($canStock): ?>
+            <?php if ($canCatalog): ?>
                 <?= Html::a('📦 Inventory', ['/inventory-stock/index']) ?>
             <?php endif; ?>
             <?php if ($canDashboard): ?>
@@ -58,13 +60,4 @@ $canManageUsers = !$isGuest && $user->can('manageUsers');
         </nav>
     <?php endif; ?>
 
-    <div class="sidebar-section-label">Website</div>
-    <nav class="sidebar-nav">
-        <?= Html::a('🏠 Homepage', ['/site/index']) ?>
-        <?= Html::a('ℹ️ About Us', ['/site/about']) ?>
-        <?= Html::a('☎️ Contact', ['/site/contact']) ?>
-        <?= Html::a('📄 Impressum', ['/site/impressum']) ?>
-    </nav>
-
-    <div class="sidebar-footer-note">Upcoming modules are shown for planning.</div>
 </aside>

@@ -22,11 +22,16 @@ class ProductionOrderController extends Controller
                 'rules' => [
                     [
                         'allow' => true,
-                        'roles' => ['inventoryEmployee', 'manager', 'owner', 'admin'],
+                        'actions' => ['index', 'batches', 'view'],
+                        'roles' => ['viewProduction'],
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['generate', 'change-status', 'update', 'delete'],
+                        'roles' => ['manageProduction'],
                     ],
                     [
                         'allow' => false,
-                        'roles' => ['?', '@'],
                     ],
                 ],
             ],

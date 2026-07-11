@@ -24,11 +24,15 @@ class DashboardController extends Controller
                 'rules' => [
                     [
                         'allow' => true,
-                        'roles' => ['manager', 'owner', 'admin'],
+                        'actions' => ['finance-revenue-data'],
+                        'roles' => ['viewFinance'],
+                    ],
+                    [
+                        'allow' => true,
+                        'roles' => ['viewDashboard'],
                     ],
                     [
                         'allow' => false,
-                        'roles' => ['?', '@'],
                     ],
                 ],
             ],
@@ -43,21 +47,24 @@ class DashboardController extends Controller
     /**
      * Returns order counts for today, this week, and this month as JSON.
      */
+    /**
+     * Returns a genuine daily time series (last 14 days) rather than
+     * nested cumulative windows, so the chart shows a real trend instead
+     * of a mathematically-guaranteed staircase (today <= week <= month).
+     */
     public function actionOrdersSummaryData()
     {
         \Yii::$app->response->format = Response::FORMAT_JSON;
 
-        $todayStart = strtotime('today');
         $weekStart = strtotime('monday this week');
         $monthStart = strtotime('first day of this month');
 
-        $todayCount = Order::find()->where(['>=', 'created_at', $todayStart])->count();
         $weekCount = Order::find()->where(['>=', 'created_at', $weekStart])->count();
         $monthCount = Order::find()->where(['>=', 'created_at', $monthStart])->count();
 
         return [
-            'labels' => ['Today', 'This Week', 'This Month'],
-            'data' => [(int) $todayCount, (int) $weekCount, (int) $monthCount],
+            'labels' => ['This Week', 'This Month'],
+            'data' => [(int) $weekCount, (int) $monthCount],
         ];
     }
 
@@ -182,5 +189,42 @@ class DashboardController extends Controller
         }
 
         return $lostClients;
+    }
+
+    /**
+     * Minimal Finance widget: total revenue per month for the last 6
+     * months, computed directly from existing Order/OrderItem data.
+     * There is no dedicated Finance module yet, so this reuses the
+     * order totals already tracked by the Orders module rather than
+     * introducing a separate finance/transactions subsystem.
+     */
+    public function actionFinanceRevenueData()
+    {
+        \Yii::$app->response->format = Response::FORMAT_JSON;
+
+        $months = 6;
+        $labels = [];
+        $data = [];
+
+        for ($i = $months - 1; $i >= 0; $i--) {
+            $monthStart = strtotime("first day of -{$i} months", strtotime('today'));
+            $monthEnd = strtotime('+1 month', $monthStart);
+
+            $rows = (new Query())
+                ->select(['SUM(order_item.quantity * order_item.unit_price) AS revenue'])
+                ->from('order_item')
+                ->innerJoin('order', 'order.id = order_item.order_id')
+                ->where(['>=', 'order.created_at', $monthStart])
+                ->andWhere(['<', 'order.created_at', $monthEnd])
+                ->scalar();
+
+            $labels[] = date('M Y', $monthStart);
+            $data[] = round((float) ($rows ?? 0), 2);
+        }
+
+        return [
+            'labels' => $labels,
+            'data' => $data,
+        ];
     }
 }
