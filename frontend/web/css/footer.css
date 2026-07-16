@@ -1,0 +1,156 @@
+/* =========================================================
+   blumenHof — Footer
+========================================================= */
+
+.bh-footer {
+    margin-top: 65px;
+    color: #536158;
+    background:
+        linear-gradient(
+            135deg,
+            #f6f9f3,
+            #fbfcfa
+        );
+    border-top: 1px solid #dce5d8;
+}
+
+.bh-footer-main {
+    display: grid;
+    grid-template-columns: minmax(0, 1.6fr) minmax(300px, 1fr);
+    gap: 80px;
+    align-items: start;
+    padding: 44px 0 34px;
+}
+
+.bh-footer-brand {
+    max-width: 520px;
+}
+
+.bh-footer-logo-link {
+    display: inline-block;
+    text-decoration: none;
+}
+
+.bh-footer-logo {
+    display: block;
+    width: auto;
+    max-width: 150px;
+    height: 62px;
+    object-fit: contain;
+    object-position: left center;
+}
+
+.bh-footer-brand p {
+    max-width: 500px;
+    margin: 18px 0 16px;
+    color: #667269;
+    font-size: 13px;
+    line-height: 1.75;
+}
+
+.bh-footer-badge {
+    display: inline-flex;
+    padding: 7px 11px;
+    color: #4d7827;
+    background: #edf5e6;
+    border: 1px solid #d8e6cf;
+    border-radius: 999px;
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.bh-footer-links {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(120px, 1fr));
+    gap: 45px;
+}
+
+.bh-footer-links > div {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.bh-footer-links h2 {
+    margin: 0 0 15px;
+    color: #426c22;
+    font-size: 11px;
+    font-weight: 850;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.bh-footer-links a {
+    position: relative;
+    margin-bottom: 10px;
+    color: #667269;
+    font-size: 12px;
+    font-weight: 650;
+    text-decoration: none;
+    transition:
+        color 150ms ease,
+        transform 150ms ease;
+}
+
+.bh-footer-links a:hover {
+    color: #426c22;
+    transform: translateX(3px);
+}
+
+.bh-footer-bottom {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    justify-content: space-between;
+    padding: 19px 0 22px;
+    border-top: 1px solid #dce5d8;
+}
+
+.bh-footer-bottom p {
+    margin: 0;
+    color: #7a847d;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.055em;
+    text-transform: uppercase;
+}
+
+.bh-footer-bottom p:last-child {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.bh-footer-bottom span {
+    color: #83aa5d;
+}
+
+@media (max-width: 767.98px) {
+    .bh-footer {
+        margin-top: 45px;
+    }
+
+    .bh-footer-main {
+        grid-template-columns: 1fr;
+        gap: 36px;
+        padding: 35px 0 28px;
+    }
+
+    .bh-footer-links {
+        gap: 25px;
+    }
+
+    .bh-footer-bottom {
+        align-items: flex-start;
+        flex-direction: column;
+        padding: 18px 0 22px;
+    }
+}
+
+@media (max-width: 479.98px) {
+    .bh-footer-links {
+        grid-template-columns: 1fr;
+    }
+}

@@ -2,123 +2,142 @@
 
 declare(strict_types=1);
 
-/** @var yii\web\View $this */
-/** @var yii\bootstrap5\ActiveForm $form */
-/** @var \common\models\LoginForm $model */
-
 use yii\bootstrap5\ActiveForm;
-use yii\bootstrap5\Html;
+use yii\helpers\Html;
 
-$this->title = 'Login to blumenHof';
-$this->params['breadcrumbs'][] = $this->title;
-$this->params['meta_description'] = 'Log in to your blumenHof internal management account.';
-$this->params['meta_keywords'] = 'blumenhof, login, sign in';
+/** @var yii\web\View $this */
+/** @var common\models\LoginForm $model */
 
-$htmlIcon = <<<HTML
-{label}<div class="input-group"><span class="input-group-text" aria-hidden="true">%s</span>{input}</div>{error}{hint}
-HTML;
-$labelOptions = ['class' => 'form-label fw-semibold small'];
+$this->title = 'Login';
 ?>
-<div class="site-login d-flex align-items-center justify-content-center py-5">
-    <div class="card border-0 overflow-hidden login-split-card">
-        <div class="row g-0">
 
-            <!-- Brand panel -->
-            <div class="col-md-5 d-none d-md-flex login-brand-panel text-white">
-                <div class="d-flex flex-column justify-content-between p-4 p-lg-5 w-100">
-                    <div>
-                        <?= Html::img(
-                            Yii::getAlias('@web/images/blumenhof-logo.svg'),
-                            [
-                                'alt' => 'Blumenhof',
-                                'class' => 'login-brand-logo mb-4',
-                            ],
-                        ) ?>
+<section class="auth-page">
+    <div class="container-fluid px-4">
+
+        <div class="auth-breadcrumb">
+            <?= Html::a('Home', ['/site/index']) ?>
+            <span>/</span>
+            <span>Login to blumenHof</span>
+        </div>
+
+        <div class="auth-wrapper">
+            <div class="auth-card">
+
+                <aside class="auth-visual">
+                    <span class="auth-visual-badge">
+                        Secure staff access
+                    </span>
+
+                    <div class="auth-visual-logo">
+                        <?= Html::img('@web/images/blumenhof-logo.svg', [
+                            'alt' => 'BlumenHof',
+                            'class' => 'auth-visual-logo-img',
+                        ]) ?>
                     </div>
-                    <div>
-                        <h2 class="fw-bold mb-3 login-brand-title">
-                            Welcome<br>Back
-                        </h2>
-                        <p class="opacity-75 mb-0 login-brand-text">
-                            Log in to manage customers, orders, production, and more.
+
+                    <div class="auth-visual-content">
+                        <h1>Welcome back</h1>
+
+                        <p>
+                            Access the central workspace for customers,
+                            orders, inventory and production.
                         </p>
-                    </div>
-                </div>
-            </div>
 
-            <!-- Form panel -->
-            <div class="col-md-7">
-                <div class="p-4 p-lg-5">
-                    <div class="text-center mb-4">
-                        <!-- Mobile-only logo -->
-                        <div class="d-md-none mb-3">
-                            <?= Html::img(
-                                Yii::getAlias('@web/images/blumenhof-logo.svg'),
-                                [
-                                    'alt' => 'Blumenhof',
-                                    'class' => 'login-mobile-logo',
-                                ],
-                            ) ?>
-                        </div>
-                        <h1 class="h3 fw-bold mb-1"><?= Html::encode($this->title) ?></h1>
-                        <p class="text-body-secondary small">Enter your credentials to continue</p>
+                        <ul class="auth-visual-points">
+                            <li>Manage customers and orders</li>
+                            <li>Monitor inventory and production</li>
+                            <li>Secure role-based access</li>
+                        </ul>
                     </div>
+                </aside>
+
+                <main class="auth-form-panel">
+                    <header class="auth-form-header">
+                        <span class="auth-eyebrow">
+                            Account access
+                        </span>
+
+                        <h2>Login to blumenHof</h2>
+
+                        <p>
+                            Enter your username and password to continue.
+                        </p>
+                    </header>
 
                     <?php $form = ActiveForm::begin([
                         'id' => 'login-form',
-                        'validateOnChange' => false,
-                        'validateOnBlur' => false,
-                        'validateOnSubmit' => true,
+                        'options' => [
+                            'class' => 'auth-form',
+                        ],
+                        'fieldConfig' => [
+                            'template' =>
+                                "{label}\n"
+                                . "<div class=\"auth-field-wrap\">"
+                                . "{input}"
+                                . "</div>\n"
+                                . "{error}",
+                            'labelOptions' => [
+                                'class' => 'auth-label',
+                            ],
+                            'errorOptions' => [
+                                'class' => 'auth-error',
+                            ],
+                        ],
                     ]); ?>
 
-                    <div class="mb-3">
-                        <?= $form->field($model, 'username', [
-                            'options' => ['class' => 'mb-0'],
-                            'template' => sprintf($htmlIcon, '&#128100;'),
-                            'inputOptions' => [
-                                'class' => 'form-control',
-                                'placeholder' => 'username',
-                                'autofocus' => true,
+                    <?= $form->field($model, 'username')->textInput([
+                        'autofocus' => true,
+                        'autocomplete' => 'username',
+                        'class' => 'form-control auth-input',
+                        'placeholder' => 'Enter your username',
+                    ]) ?>
+
+                    <?= $form->field($model, 'password')->passwordInput([
+                        'autocomplete' => 'current-password',
+                        'class' => 'form-control auth-input',
+                        'placeholder' => 'Enter your password',
+                    ]) ?>
+
+                    <div class="auth-form-options">
+                        <?= $form->field($model, 'rememberMe', [
+                            'template' =>
+                                "<div class=\"form-check auth-check\">"
+                                . "{input} {label}"
+                                . "</div>\n"
+                                . "{error}",
+                            'labelOptions' => [
+                                'class' =>
+                                    'form-check-label auth-check-label',
                             ],
-                        ])->textInput()->label('Your Username', $labelOptions) ?>
+                        ])->checkbox([
+                            'class' => 'form-check-input',
+                        ], false) ?>
                     </div>
 
-                    <div class="mb-3">
-                        <?= $form->field($model, 'password', [
-                            'options' => ['class' => 'mb-0'],
-                            'template' => sprintf($htmlIcon, '&#128274;'),
-                            'inputOptions' => [
-                                'class' => 'form-control',
-                                'placeholder' => 'Password',
-                            ],
-                        ])->passwordInput()->label('Your Password', $labelOptions) ?>
-                    </div>
+                    <?= Html::submitButton('Login', [
+                        'class' => 'btn auth-login-btn',
+                        'name' => 'login-button',
+                    ]) ?>
 
-                    <div class="mb-4">
-                        <?= $form->field($model, 'rememberMe')->checkbox() ?>
-                    </div>
+                    <div class="auth-links">
+                        <?= Html::a(
+                            'Forgot your password?',
+                            ['/site/request-password-reset']
+                        ) ?>
 
-                    <div class="d-grid">
-                        <?= Html::submitButton(
-                            'Login',
-                            [
-                                'class' => 'btn login-btn btn-lg rounded-3 text-white',
-                                'name' => 'login-button',
-                            ],
+                        <span aria-hidden="true">•</span>
+
+                        <?= Html::a(
+                            'Resend verification email',
+                            ['/site/resend-verification-email']
                         ) ?>
                     </div>
 
                     <?php ActiveForm::end(); ?>
+                </main>
 
-                    <div class="text-body-secondary text-center mt-3 small">
-                        <?= Html::a('Forgot your password?', ['site/request-password-reset']) ?>
-                        <span class="mx-1">&middot;</span>
-                        <?= Html::a('Resend verification email', ['site/resend-verification-email']) ?>
-                    </div>
-
-                </div>
             </div>
-
         </div>
+
     </div>
-</div>
+</section>

@@ -124,33 +124,62 @@ class OrderController extends Controller
         $itemModels = $model->items ?: [new OrderItem()];
 
         if ($model->load(Yii::$app->request->post())) {
-            $oldItemIds = array_map(static fn ($item) => $item->id, $itemModels);
-            $itemModels = $this->createOrderItems(Yii::$app->request->post('OrderItem', []));
+            $oldItemIds = array_values(array_filter(
+                array_map(
+                    static fn ($item) => $item->id,
+                    $itemModels,
+                ),
+            ));
+
+            $itemModels = $this->createOrderItems(
+                Yii::$app->request->post('OrderItem', []),
+            );
 
             if ($model->validate() && $this->validateItems($itemModels)) {
                 $transaction = Yii::$app->db->beginTransaction();
+
                 try {
-                    if ($model->save()) {
-                        OrderItem::deleteAll(['id' => $oldItemIds]);
-                        foreach ($itemModels as $itemModel) {
-                            $itemModel->order_id = $model->id;
-                            $itemModel->save(false);
-                        }
-                        $transaction->commit();
+                    if (!$model->save()) {
+                        $transaction->rollBack();
 
-                        if ($isNewCompanyFirstOrder) {
-                            Yii::$app->session->setFlash(
-                                'success',
-                                "Order created — this is {$newCompany->name}'s first order in the system."
-                            );
-                        }
-
-                        return $this->redirect(['view', 'id' => $model->id]);
+                        return $this->render('update', [
+                            'model' => $model,
+                            'itemModels' => $itemModels,
+                        ]);
                     }
+
+                    if ($oldItemIds !== []) {
+                        OrderItem::deleteAll(['id' => $oldItemIds]);
+                    }
+
+                    foreach ($itemModels as $itemModel) {
+                        $itemModel->order_id = $model->id;
+                        $itemModel->save(false);
+                    }
+
+                    $transaction->commit();
+
+                    Yii::$app->session->setFlash(
+                        'success',
+                        'Order updated successfully.',
+                    );
+
+                    return $this->redirect([
+                        'view',
+                        'id' => $model->id,
+                    ]);
+                } catch (\Throwable $exception) {
                     $transaction->rollBack();
-                } catch (\Throwable $e) {
-                    $transaction->rollBack();
-                    Yii::error($e->getMessage(), __METHOD__);
+
+                    Yii::error(
+                        $exception->getMessage(),
+                        __METHOD__,
+                    );
+
+                    Yii::$app->session->setFlash(
+                        'error',
+                        'The order could not be updated.',
+                    );
                 }
             }
         }

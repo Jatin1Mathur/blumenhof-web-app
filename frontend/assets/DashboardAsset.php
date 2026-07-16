@@ -5,19 +5,23 @@ declare(strict_types=1);
 namespace frontend\assets;
 
 use yii\web\AssetBundle;
+use yii\web\View;
 
 class DashboardAsset extends AssetBundle
 {
-    public $css = [];
-    public $js = [];
+    public $basePath = '@webroot';
+    public $baseUrl = '@web';
 
-    public $jsOptions = ['position' => \yii\web\View::POS_HEAD];
+    public $css = [
+        'css/dashboard.css',
+    ];
 
-    public function init(): void
-    {
-        parent::init();
-        $this->js = [
-            'https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js',
-        ];
-    }
+    public $js = [
+        'js/vendor/chart.umd.min.js',
+        'js/dashboard.js',
+    ];
+
+    public $jsOptions = [
+        'position' => View::POS_HEAD,
+    ];
 }

@@ -41,7 +41,48 @@ class DashboardController extends Controller
 
     public function actionIndex()
     {
-        return $this->render('index');
+        $today = date('Y-m-d');
+
+        $recentOrders = Order::find()
+            ->with(['company', 'contact', 'items'])
+            ->orderBy(['created_at' => SORT_DESC])
+            ->limit(6)
+            ->all();
+
+        $upcomingDeliveries = Order::find()
+            ->with(['company', 'contact'])
+            ->andWhere(['is not', 'delivery_date', null])
+            ->andWhere(['>=', 'delivery_date', $today])
+            ->andWhere([
+                'not in',
+                'status',
+                [
+                    Order::STATUS_DELIVERED,
+                    Order::STATUS_COMPLETED,
+                ],
+            ])
+            ->orderBy(['delivery_date' => SORT_ASC])
+            ->limit(5)
+            ->all();
+
+        $overdueOrderCount = (int) Order::find()
+            ->andWhere(['is not', 'delivery_date', null])
+            ->andWhere(['<', 'delivery_date', $today])
+            ->andWhere([
+                'not in',
+                'status',
+                [
+                    Order::STATUS_DELIVERED,
+                    Order::STATUS_COMPLETED,
+                ],
+            ])
+            ->count();
+
+        return $this->render('index', [
+            'recentOrders' => $recentOrders,
+            'upcomingDeliveries' => $upcomingDeliveries,
+            'overdueOrderCount' => $overdueOrderCount,
+        ]);
     }
 
     /**

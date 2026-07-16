@@ -1,0 +1,243 @@
+.bh-cookie-banner {
+    position: fixed;
+    right: 24px;
+    bottom: 24px;
+    left: 24px;
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    pointer-events: none;
+}
+
+.bh-cookie-card {
+    width: min(100%, 980px);
+    background: rgba(255, 255, 255, 0.96);
+    border: 1px solid #dbe7d2;
+    border-radius: 24px;
+    box-shadow: 0 24px 70px rgba(34, 55, 20, 0.16);
+    backdrop-filter: blur(10px);
+    pointer-events: auto;
+    overflow: hidden;
+}
+
+.bh-cookie-main {
+    display: flex;
+    gap: 24px;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24px 26px;
+}
+
+.bh-cookie-text {
+    max-width: 620px;
+}
+
+.bh-cookie-eyebrow {
+    display: inline-block;
+    margin-bottom: 8px;
+    color: #6e9b2e;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.bh-cookie-text h3 {
+    margin: 0 0 8px;
+    color: #1e2b1f;
+    font-size: 18px;
+    font-weight: 800;
+}
+
+.bh-cookie-text p {
+    margin: 0;
+    color: #617061;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.bh-cookie-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
+.bh-cookie-btn {
+    min-height: 48px;
+    padding: 0 22px;
+    border-radius: 14px;
+    font-size: 15px;
+    font-weight: 700;
+    border: 1px solid transparent;
+    transition: all 0.18s ease;
+    cursor: pointer;
+}
+
+.bh-cookie-btn-light {
+    background: #f7faf4;
+    border-color: #d8e4d0;
+    color: #435243;
+}
+
+.bh-cookie-btn-light:hover {
+    background: #eef5e8;
+}
+
+.bh-cookie-btn-outline {
+    background: #ffffff;
+    border-color: #cfdcc7;
+    color: #486425;
+}
+
+.bh-cookie-btn-outline:hover {
+    background: #f8fcf5;
+}
+
+.bh-cookie-btn-primary {
+    background: linear-gradient(135deg, #4f7f1f, #7aad2f);
+    color: #ffffff;
+    box-shadow: 0 12px 24px rgba(91, 138, 31, 0.24);
+}
+
+.bh-cookie-btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 14px 28px rgba(91, 138, 31, 0.28);
+}
+
+.bh-cookie-settings {
+    border-top: 1px solid #e4ecde;
+    padding: 20px 26px 24px;
+    background: #fbfdf9;
+}
+
+.bh-cookie-settings-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 18px;
+}
+
+.bh-cookie-settings-head h4 {
+    margin: 0;
+    color: #243025;
+    font-size: 18px;
+    font-weight: 800;
+}
+
+.bh-cookie-close {
+    width: 38px;
+    height: 38px;
+    border: 1px solid #d6e1cf;
+    border-radius: 12px;
+    background: #ffffff;
+    color: #536253;
+    font-size: 24px;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.bh-cookie-option {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    padding: 16px 0;
+    border-top: 1px solid #e7eee2;
+}
+
+.bh-cookie-option:first-of-type {
+    border-top: 0;
+}
+
+.bh-cookie-option-copy strong {
+    display: block;
+    margin-bottom: 6px;
+    color: #233124;
+    font-size: 15px;
+}
+
+.bh-cookie-option-copy p {
+    margin: 0;
+    color: #667466;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.bh-cookie-settings-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+    margin-top: 18px;
+}
+
+.bh-cookie-switch {
+    position: relative;
+    display: inline-flex;
+    width: 52px;
+    height: 30px;
+    flex: 0 0 auto;
+}
+
+.bh-cookie-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.bh-cookie-slider {
+    position: absolute;
+    inset: 0;
+    background: #d3ddd0;
+    border-radius: 999px;
+    transition: 0.2s ease;
+}
+
+.bh-cookie-slider::before {
+    content: "";
+    position: absolute;
+    width: 22px;
+    height: 22px;
+    left: 4px;
+    top: 4px;
+    background: #ffffff;
+    border-radius: 50%;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+    transition: 0.2s ease;
+}
+
+.bh-cookie-switch input:checked + .bh-cookie-slider {
+    background: #72a82e;
+}
+
+.bh-cookie-switch input:checked + .bh-cookie-slider::before {
+    transform: translateX(22px);
+}
+
+@media (max-width: 767px) {
+    .bh-cookie-banner {
+        right: 14px;
+        bottom: 14px;
+        left: 14px;
+    }
+
+    .bh-cookie-main {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .bh-cookie-actions,
+    .bh-cookie-settings-actions {
+        width: 100%;
+        justify-content: stretch;
+    }
+
+    .bh-cookie-actions .bh-cookie-btn,
+    .bh-cookie-settings-actions .bh-cookie-btn {
+        flex: 1 1 100%;
+    }
+
+    .bh-cookie-option {
+        align-items: flex-start;
+    }
+}
