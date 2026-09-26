@@ -116,42 +116,49 @@ class RbacController extends Controller
     }
 
     /**
-     * Recreates the protected blumenhofadmin account if it's missing, and
-     * (re)assigns the admin role to it. Safe to re-run at any time: if the
-     * account already exists, only the role assignment is refreshed.
+     * Creates or updates the protected blumenhofadmin account and (re)assigns
+     * the admin role to it. Safe to re-run at any time.
      *
-     * Useful because the test suite and the real app currently share one
-     * database, so running the automated tests clears the user table and
-     * removes this account as a side effect.
+     * The password is read from the ADMIN_PASSWORD environment variable and is
+     * never stored in the code. Changing the variable and restarting the app
+     * changes the admin password. If the variable is not set, nothing happens.
      *
-     * Run with:  php yii rbac/seed-admin
+     * Run with:  ADMIN_PASSWORD='your-password' php yii rbac/seed-admin
      */
     public function actionSeedAdmin()
     {
         $auth = Yii::$app->authManager;
         $username = 'blumenhofadmin';
-        $email = 'hofsemesterwork@gmail.com';
-        $password = 'BlumenGroup4';
+        $email = getenv('ADMIN_EMAIL') ?: 'hofsemesterwork@gmail.com';
+        $password = getenv('ADMIN_PASSWORD');
+
+        if (empty($password)) {
+            $this->stdout("ADMIN_PASSWORD is not set, skipping admin seeding.\n");
+            return ExitCode::OK;
+        }
 
         $user = \common\models\User::findOne(['username' => $username]);
+        $isNew = ($user === null);
 
-        if ($user === null) {
+        if ($isNew) {
             $user = new \common\models\User();
             $user->username = $username;
             $user->email = $email;
-            $user->setPassword($password);
             $user->generateAuthKey();
             $user->status = \common\models\User::STATUS_ACTIVE;
-
-            if (!$user->save()) {
-                $this->stderr("Failed to create admin user: " . json_encode($user->getErrors()) . "\n");
-                return ExitCode::UNSPECIFIED_ERROR;
-            }
-
-            $this->stdout("Created {$username} (id={$user->id}).\n");
-        } else {
-            $this->stdout("{$username} already exists (id={$user->id}), refreshing role only.\n");
         }
+
+        // The password always follows ADMIN_PASSWORD.
+        $user->setPassword($password);
+
+        if (!$user->save()) {
+            $this->stderr("Failed to save admin user: " . json_encode($user->getErrors()) . "\n");
+            return ExitCode::UNSPECIFIED_ERROR;
+        }
+
+        $this->stdout($isNew
+            ? "Created {$username} (id={$user->id}).\n"
+            : "{$username} exists (id={$user->id}), password updated from ADMIN_PASSWORD.\n");
 
         $adminRole = $auth->getRole('admin');
         if ($adminRole === null) {
