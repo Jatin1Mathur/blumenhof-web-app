@@ -1,142 +1,121 @@
 <p align="center">
-    <picture>
-        <source media="(prefers-color-scheme: dark)" srcset="https://www.yiiframework.com/image/design/logo/yii3_full_for_dark.svg">
-        <source media="(prefers-color-scheme: light)" srcset="https://www.yiiframework.com/image/design/logo/yii3_full_for_light.svg">
-        <img src="https://www.yiiframework.com/image/design/logo/yii3_full_for_light.svg" alt="Yii Framework" height="100">
-    </picture>
-    <h1 align="center">Yii 2 Advanced Project Template</h1>
-    <br>
+  <img src="https://img.shields.io/badge/🌸-BlumenHof-6B8E23?style=for-the-badge" alt="BlumenHof" height="40">
 </p>
 
-Yii 2 Advanced Project Template is a skeleton [Yii 2](https://www.yiiframework.com/) application best for
-developing complex Web applications with multiple tiers.
+<h1 align="center">BlumenHof · Florist Management Platform</h1>
 
-The template includes three tiers: front end, back end, and console, each of which
-is a separate Yii application.
+<p align="center">
+  <b>Fresh flowers · Smart management · COSD project</b><br>
+  A web platform that helps a florist business manage customers, orders, products, stock and staff access in one place.
+</p>
 
-The template is designed to work in a team development environment. It supports
-deploying the application in different environments.
+<p align="center">
+  <a href="https://blumenhof-shop.onrender.com"><img src="https://img.shields.io/badge/Live_Demo-blumenhof--shop.onrender.com-2EA44F?style=for-the-badge&logo=render&logoColor=white" alt="Live demo"></a>
+</p>
 
-Documentation is at [docs/guide/README.md](docs/guide/README.md).
+<p align="center">
+  <img src="https://img.shields.io/badge/PHP-8.4-777BB4?style=flat&logo=php&logoColor=white" alt="PHP 8.4">
+  <img src="https://img.shields.io/badge/Yii2-Advanced-40B3D8?style=flat&logo=yii&logoColor=white" alt="Yii2">
+  <img src="https://img.shields.io/badge/MySQL-8-4479A1?style=flat&logo=mysql&logoColor=white" alt="MySQL">
+  <img src="https://img.shields.io/badge/Docker-ready-2496ED?style=flat&logo=docker&logoColor=white" alt="Docker">
+  <img src="https://img.shields.io/badge/Tests-Codeception-6F42C1?style=flat" alt="Codeception">
+  <img src="https://img.shields.io/badge/License-BSD--3--Clause-brightgreen?style=flat" alt="License">
+</p>
 
-[![Latest Stable Version](https://img.shields.io/packagist/v/yiisoft/yii2-app-advanced.svg?style=for-the-badge&label=Stable&logo=packagist)](https://packagist.org/packages/yiisoft/yii2-app-advanced)
-[![Total Downloads](https://img.shields.io/packagist/dt/yiisoft/yii2-app-advanced.svg?style=for-the-badge&label=Downloads)](https://packagist.org/packages/yiisoft/yii2-app-advanced)
-[![build](https://img.shields.io/github/actions/workflow/status/yiisoft/yii2-app-advanced/build.yml?style=for-the-badge&logo=github&label=Build)](https://github.com/yiisoft/yii2-app-advanced/actions?query=workflow%3Abuild)
-[![Static Analysis](https://img.shields.io/github/actions/workflow/status/yiisoft/yii2-app-advanced/static.yml?style=for-the-badge&label=Static)](https://github.com/yiisoft/yii2-app-advanced/actions/workflows/static.yml)
+---
 
-## Docker
+## 🌷 About the Project
 
-[![Apache](https://img.shields.io/github/actions/workflow/status/yiisoft/yii2-app-advanced/docker.yml?style=for-the-badge&logo=apache&label=Apache)](https://github.com/yiisoft/yii2-app-advanced/actions/workflows/docker.yml)
+**BlumenHof** is a fictional florist and garden-goods business. Like many small businesses, it used to run on emails, spreadsheets and paper: customer details in one place, orders in another, stock counted by hand.
 
-REQUIREMENTS
-------------
+This project replaces that with a single web platform where the team can:
 
-> [!IMPORTANT]
-> - The minimum required [PHP](https://www.php.net/) version of Yii is PHP `8.2`.
+- keep track of **business customers and contacts**,
+- manage the **product catalog and stock levels**,
+- create and follow **orders** from creation to delivery,
+- and control **who can see and change what**, based on each employee's role.
 
-## Install via Composer
+The application is built on the **Yii2 Advanced Template** and is deployed live using Docker.
 
-If you do not have [Composer](https://getcomposer.org/), you may install it by following the instructions
-at [getcomposer.org](https://getcomposer.org/doc/00-intro.md#installation-nix).
+> **Live demo:** [blumenhof-shop.onrender.com](https://blumenhof-shop.onrender.com)
+> The free hosting plan sleeps after inactivity, so the first visit can take up to a minute to load.
 
-You can then install this project template using the following commands:
+---
 
+## ✨ Features
+
+| Module | What it does |
+|---|---|
+| 👥 **CRM** | Manage customer companies (hotels, event planners, corporate clients) and their contact persons, grouped by customer category |
+| 💐 **Catalog** | Products and product categories, prices, perishable flag and product images |
+| 📦 **Stock** | Stock quantities per product with **low-stock warnings** when a threshold is reached |
+| 🧾 **Orders** | Orders with multiple items, status tracking and delivery dates, linked to customers |
+| 🔐 **Access control** | Role-based access (RBAC): every role only sees the modules it needs |
+| 👤 **Accounts** | Sign up, login, password reset and email verification |
+| 🏠 **Public pages** | Home, About Us, Contact and Impressum |
+
+---
+
+## 🔐 Roles & Permissions
+
+Access is controlled with Yii's database-backed RBAC (`DbManager`). Each module has a **view** and a **manage** permission, where *manage* includes *view*.
+
+| Role | Access |
+|---|---|
+| `guest` | Default role for new sign-ups, no module access until a role is assigned |
+| `salesEmployee` | Manage **Orders**, view **Catalog** and **Production** |
+| `financialEmployee` | Manage **Finance**, view **Orders**, download reports |
+| `inventoryEmployee` | Manage **Catalog** and **Production** |
+| `manager` | Everything the three employee roles can do, plus manage **CRM** and **Dashboard**, view **Finance** |
+| `owner` | View **every** module and download reports (read-only) |
+| `admin` | Manage system users |
+
+---
+
+## 🏗️ Architecture
+
+```mermaid
+flowchart LR
+    U[👤 Browser] -->|HTTPS| F[Frontend app<br/>Yii2 + Apache]
+    U -.->|HTTPS| B[Backend app<br/>Yii2 + Apache]
+    F -->|PDO over TLS| DB[(MySQL 8)]
+    B -->|PDO over TLS| DB
+    C[Console app<br/>migrations · RBAC · seeding] --> DB
+```
+
+The project follows the Yii2 **three-tier** structure:
+
+| Folder | Purpose |
+|---|---|
+| `frontend/` | The main BlumenHof application: public pages and all business modules |
+| `backend/` | Separate admin application (basic admin panel) |
+| `console/` | Command-line tools: migrations, RBAC setup and demo data seeding |
+| `common/` | Shared models (User, Order, Product, CustomerCompany, ...) and configuration |
+| `environments/` | Environment-specific configuration for development and production |
+
+---
+
+## 🚀 Getting Started (Local Development)
+
+### Requirements
+- Docker and Docker Compose
+- Git
+
+### 1. Clone and start the containers
 ```bash
-composer create-project --prefer-dist yiisoft/yii2-app-advanced advanced
-cd advanced
-```
-
-### Frontend
-
-<picture>
-    <source media="(prefers-color-scheme: dark)" srcset="docs/images/frontend/home-dark.png">
-    <source media="(prefers-color-scheme: light)" srcset="docs/images/frontend/home-light.png">
-    <img src="docs/images/frontend/home-light.png" alt="Web Application Advanced - Frontend">
-</picture>
-
-### Backend
-
-<picture>
-    <source media="(prefers-color-scheme: dark)" srcset="docs/images/backend/home-dark.png">
-    <source media="(prefers-color-scheme: light)" srcset="docs/images/backend/home-light.png">
-    <img src="docs/images/backend/home-light.png" alt="Web Application Advanced - Backend">
-</picture>
-
-DIRECTORY STRUCTURE
--------------------
-
-```
-common
-    config/              contains shared configurations
-    mail/                contains view files for e-mails
-    models/              contains model classes used in both backend and frontend
-    tests/               contains tests for common classes
-console
-    config/              contains console configurations
-    controllers/         contains console controllers (commands)
-    migrations/          contains database migrations
-    models/              contains console-specific model classes
-    runtime/             contains files generated during runtime
-backend
-    assets/              contains application assets such as JavaScript and CSS
-    config/              contains backend configurations
-    controllers/         contains Web controller classes
-    models/              contains backend-specific model classes
-    runtime/             contains files generated during runtime
-    tests/               contains tests for backend application
-    views/               contains view files for the Web application
-    web/                 contains the entry script and Web resources
-frontend
-    assets/              contains application assets such as JavaScript and CSS
-    config/              contains frontend configurations
-    controllers/         contains Web controller classes
-    models/              contains frontend-specific model classes
-    runtime/             contains files generated during runtime
-    tests/               contains tests for frontend application
-    views/               contains view files for the Web application
-    web/                 contains the entry script and Web resources
-    widgets/             contains frontend widgets
-vendor/                  contains dependent 3rd-party packages
-environments/            contains environment-based overrides
-```
-
-Initialize the application for the `Development` environment:
-
-```bash
-php init --env=Development --overwrite=All
-```
-
-Now you should be able to access the application through the following URLs, assuming `advanced` is the directory
-directly under the Web root.
-
-```
-http://localhost/advanced/frontend/web/
-http://localhost/advanced/backend/web/
-```
-
-## Install with Docker
-
-Build and start the containers:
-
-```bash
+git clone https://github.com/Jatin1Mathur/blumenhof-web-app.git
+cd blumenhof-web-app
 docker compose up -d --build
 ```
 
-Install dependencies inside the container:
-
+### 2. Install dependencies and initialize
 ```bash
-docker compose exec frontend composer update --prefer-dist --no-interaction
-```
-
-Initialize the application for the `Development` environment:
-
-```bash
+docker compose exec frontend composer install
 docker compose exec frontend php /app/init --env=Development --overwrite=All
 ```
 
-After running `init`, update the database connection in `common/config/main-local.php` to use the `mysql`
-service hostname:
-
+### 3. Point the app to the Docker database
+In `common/config/main-local.php`, set the database connection to the `mysql` service:
 ```php
 'db' => [
     'class' => \yii\db\Connection::class,
@@ -147,113 +126,96 @@ service hostname:
 ],
 ```
 
-You can then access the application through the following URLs:
-
+### 4. Create tables, roles and the admin account
+```bash
+docker compose exec frontend php /app/yii migrate --migrationPath=@yii/rbac/migrations --interactive=0
+docker compose exec frontend php /app/yii migrate --interactive=0
+docker compose exec frontend php /app/yii rbac/init
+docker compose exec frontend php /app/yii rbac/add-guest
+docker compose exec frontend php /app/yii rbac/seed-admin
 ```
-http://127.0.0.1:20080  (frontend)
-http://127.0.0.1:21080  (backend)
+
+### 5. (Optional) Load demo data
+Adds sample product categories, products, customers, stock and orders:
+```bash
+docker compose exec frontend php /app/yii seed/demo
 ```
 
-To run the test suite, also update `common/config/test-local.php` to use the `mysql` hostname and create the
-test database:
+### 6. Open the app
+| App | URL |
+|---|---|
+| Frontend (BlumenHof) | http://127.0.0.1:20080 |
+| Backend (admin) | http://127.0.0.1:21080 |
 
-```php
-'db' => [
-    'dsn' => 'mysql:host=mysql;dbname=yii2advanced_test',
-],
-```
+---
+
+## 🛠️ Console Commands
+
+| Command | Description |
+|---|---|
+| `php yii migrate` | Create or update all database tables |
+| `php yii rbac/init` | Create all roles and permissions (run once) |
+| `php yii rbac/add-guest` | Create the `guest` role for new sign-ups (safe to re-run) |
+| `php yii rbac/seed-admin` | Create the protected admin account and assign the `admin` role (safe to re-run) |
+| `php yii seed/demo` | Load realistic florist demo data |
+
+> ⚠️ The admin account's initial credentials are defined in `console/controllers/RbacController.php`.
+> **Change the password after the first login**, especially on a public deployment.
+
+---
+
+## ☁️ Deployment
+
+The live version runs on free cloud services:
+
+| Part | Service |
+|---|---|
+| Web app (Docker) | [Render](https://render.com), region Frankfurt |
+| Database | [Aiven](https://aiven.io) MySQL, Europe, TLS required |
+
+The root `Dockerfile` builds a production image: it installs dependencies, initializes the **Production** environment, creates the runtime folders, and on every start runs the migrations, RBAC setup and admin seeding before launching Apache. The build argument `APP` selects which application is served (`frontend` or `backend`).
+
+Database settings are read from **environment variables**, so no passwords are stored in the code:
+
+| Variable | Example | Purpose |
+|---|---|---|
+| `DB_HOST` | `your-db.aivencloud.com` | Database host |
+| `DB_PORT` | `28522` | Database port |
+| `DB_NAME` | `defaultdb` | Database name |
+| `DB_USER` | `avnadmin` | Database user |
+| `DB_PASSWORD` | *(secret)* | Database password |
+| `DB_SSL_CA` | `/app/ca.pem` | CA certificate for the TLS connection |
+| `PORT` | `80` | Port Apache listens on |
+| `APP` | `frontend` | App to serve: `frontend` or `backend` |
+
+---
+
+## 🧪 Testing
+
+Tests are written with [Codeception](https://codeception.com/) and live in `frontend/tests`, `backend/tests` and `common/tests`.
 
 ```bash
-docker compose exec -T mysql mysql -uroot -pverysecret -e "CREATE DATABASE IF NOT EXISTS yii2advanced_test; GRANT ALL PRIVILEGES ON yii2advanced_test.* TO 'yii2advanced'@'%'; FLUSH PRIVILEGES;"
-docker compose exec -T frontend php /app/yii_test migrate --interactive=0
-docker compose exec -T frontend vendor/bin/codecept build
-docker compose exec -T frontend vendor/bin/codecept run
+vendor/bin/codecept run
 ```
 
-**NOTES:**
-- Minimum required Docker engine version `17.04` for development (see [Performance tuning for volume mounts](https://docs.docker.com/docker-for-mac/osxfs-caching/))
-- The default configuration uses a host-volume in your home directory `~/.composer-docker/cache` for Composer caches
+> Use a **separate test database**. The test suite clears the `user` table, so running it against the real database removes all accounts (`php yii rbac/seed-admin` restores the admin account).
 
-CONFIGURATION
--------------
+---
 
-## Database
+## 👤 Maintainer
 
-Edit the file `common/config/main-local.php` with real data, for example:
+**Jatin Mathur**, Master's student at **Hof University of Applied Sciences**
 
-```php
-return [
-    'components' => [
-        'db' => [
-            'class' => \yii\db\Connection::class,
-            'dsn' => 'mysql:host=localhost;dbname=yii2advanced',
-            'username' => 'root',
-            'password' => '1234',
-            'charset' => 'utf8',
-        ],
-    ],
-];
-```
+- Production Docker setup, cloud deployment (Render + Aiven) and environment-based configuration
+- RBAC and admin setup on the live system
+- Project documentation
 
-When using Docker, the MySQL service is pre-configured. Update `common/config/main-local.php` to use:
+[![GitHub](https://img.shields.io/badge/GitHub-Jatin1Mathur-181717?style=flat&logo=github)](https://github.com/Jatin1Mathur)
 
-```php
-'db' => [
-    'class' => \yii\db\Connection::class,
-    'dsn' => 'mysql:host=mysql;dbname=yii2advanced',
-    'username' => 'yii2advanced',
-    'password' => 'secret',
-    'charset' => 'utf8',
-],
-```
+Originally developed as a course project for **COSD** at Hof University, organized with Scrum and tracked in Jira (`FLR` tickets).
 
-Apply migrations:
+---
 
-```bash
-php yii migrate
-```
+## 📄 License
 
-Or with Docker:
-
-```bash
-docker compose exec frontend php /app/yii migrate
-```
-
-**NOTES:**
-- Yii won't create the database for you, this has to be done manually before you can access it.
-  When using Docker, the MySQL service creates the database automatically.
-- Check and edit the other files in the `config/` directories to customize your application as required.
-- Refer to the README in the `tests` directory for information specific to application tests.
-
-TESTING
--------
-
-Tests are located in `frontend/tests`, `backend/tests`, and `common/tests` directories.
-They are developed with [Codeception PHP Testing Framework](https://codeception.com/).
-
-Tests can be executed by running:
-
-```bash
-vendor/bin/codecept run --env php-builtin
-```
-
-Or using the Composer script:
-
-```bash
-composer tests
-```
-
-## Support the project
-
-[![Open Collective](https://img.shields.io/badge/Open%20Collective-sponsor-7eadf1?style=for-the-badge&logo=open%20collective&logoColor=7eadf1&labelColor=555555)](https://opencollective.com/yiisoft)
-
-## Follow updates
-
-[![Official website](https://img.shields.io/badge/Powered_by-Yii_Framework-green.svg?style=for-the-badge&logo=yii)](https://www.yiiframework.com/)
-[![Follow on X](https://img.shields.io/badge/-Follow%20on%20X-1DA1F2.svg?style=for-the-badge&logo=x&logoColor=white&labelColor=000000)](https://x.com/yiiframework)
-[![Telegram](https://img.shields.io/badge/telegram-join-1DA1F2?style=for-the-badge&logo=telegram)](https://t.me/yii_framework_in_english)
-[![Slack](https://img.shields.io/badge/slack-join-1DA1F2?style=for-the-badge&logo=slack)](https://yiiframework.com/go/slack)
-
-## License
-
-[![License](https://img.shields.io/badge/License-BSD--3--Clause-brightgreen.svg?style=for-the-badge&logo=opensourceinitiative&logoColor=white&labelColor=555555)](LICENSE.md)
+Based on the [Yii 2 Advanced Project Template](https://github.com/yiisoft/yii2-app-advanced), licensed under the **BSD-3-Clause** license. See [LICENSE.md](LICENSE.md).
