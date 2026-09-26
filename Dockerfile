@@ -10,6 +10,12 @@ COPY . /app
 RUN composer install --no-dev --optimize-autoloader --no-interaction \
  && php init --env=Production --overwrite=All
 
+# Create runtime folders (sessions, logs, cache) and let Apache write to them
+RUN mkdir -p frontend/runtime/sessions backend/runtime/sessions console/runtime \
+             frontend/web/assets backend/web/assets \
+ && chown -R www-data:www-data frontend/runtime backend/runtime \
+                               frontend/web/assets backend/web/assets
+
 # Point Apache to the right web folder
 RUN sed -i -e "s|/app/web|/app/${APP}/web|g" /etc/apache2/sites-available/000-default.conf
 
