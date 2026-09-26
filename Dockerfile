@@ -21,5 +21,6 @@ RUN sed -i -e "s|/app/web|/app/${APP}/web|g" /etc/apache2/sites-available/000-de
 
 EXPOSE 80
 
-# On every start: role tables, app tables, roles, guest role, admin account, then web server
-CMD ["sh", "-c", "php yii migrate --migrationPath=@yii/rbac/migrations --interactive=0 && php yii migrate --interactive=0 && (php yii rbac/init || true) && php yii rbac/add-guest && php yii rbac/seed-admin && apache2-foreground"]
+# On every start: role tables, app tables, roles, guest role, admin account,
+# demo data only when SEED_DEMO=1, then the web server
+CMD ["sh", "-c", "php yii migrate --migrationPath=@yii/rbac/migrations --interactive=0 && php yii migrate --interactive=0 && (php yii rbac/init || true) && php yii rbac/add-guest && php yii rbac/seed-admin && if [ ${SEED_DEMO:-0} = 1 ]; then php yii seed/demo || true; fi && apache2-foreground"]
