@@ -21,5 +21,5 @@ RUN sed -i -e "s|/app/web|/app/${APP}/web|g" /etc/apache2/sites-available/000-de
 
 EXPOSE 80
 
-# Create/update database tables, then start the web server
-CMD ["sh", "-c", "php yii migrate --interactive=0 && apache2-foreground"]
+# On every start: role tables, app tables, roles, guest role, admin account, then web server
+CMD ["sh", "-c", "php yii migrate --migrationPath=@yii/rbac/migrations --interactive=0 && php yii migrate --interactive=0 && (php yii rbac/init || true) && php yii rbac/add-guest && php yii rbac/seed-admin && apache2-foreground"]
